@@ -52,6 +52,11 @@ const AppHeader = () => {
                     Explore
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink to="/myposts" tag={Link}>
+                    My Posts
+                  </NavLink>
+                </NavItem>
                 {isAdmin() && (
                   <NavItem>
                     <NavLink to="/categories" tag={Link}>
