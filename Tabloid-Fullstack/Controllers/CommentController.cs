@@ -17,10 +17,10 @@ namespace Tabloid_Fullstack.Controllers
             _commentRepository = commentRepository;
             }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("{PostId}")]
+        public IActionResult Get(int PostId)
         {
-            return Ok(_commentRepository.GetAll());
+            return Ok(_commentRepository.GetAll(PostId));
         }
 
 

@@ -15,11 +15,11 @@ namespace Tabloid_Fullstack.Repositories
         {
             _context = context;
         }
-        public List<Comment> GetAll()
+        public List<Comment> GetAll(int PostId)
         {
             {
                 return _context.Comment
-                    //.Where(c => c.PostId == postId)
+                    .Where(c => c.PostId == PostId)
                     .OrderBy(c => c.CreateDateTime)
                     .ToList();
             }
