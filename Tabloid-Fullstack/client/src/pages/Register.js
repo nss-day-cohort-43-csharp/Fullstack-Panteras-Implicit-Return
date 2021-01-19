@@ -40,7 +40,7 @@ const Register = () => {
       })
       .catch((err) => {
         setLoading(false);
-        toast.error("Invalid email");
+        toast.error("Email is already attached to a user.");
       });
   };
 
