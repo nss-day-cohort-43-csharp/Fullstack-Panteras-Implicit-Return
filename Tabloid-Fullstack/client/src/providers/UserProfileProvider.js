@@ -4,7 +4,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 export const UserProfileContext = createContext();
-export const userTypeId = JSON.parse(localStorage.getItem("userProfile")).userTypeId;
+// export const userTypeId = JSON.parse(localStorage.getItem("userProfile")).userTypeId;
 
 export function UserProfileProvider(props) {
   const apiUrl = "/api/userprofile";

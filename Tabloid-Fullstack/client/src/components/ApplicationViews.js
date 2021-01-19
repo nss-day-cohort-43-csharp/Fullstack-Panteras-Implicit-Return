@@ -24,7 +24,7 @@ const ApplicationViews = () => {
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
       </Route>
       <Route path="/categories">
-        {isLoggedIn && userTypeId === 1? <CategoryManager /> : <Redirect to="/notfound" />}
+        {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1? <CategoryManager /> : <Redirect to="/notfound" />}
       </Route>
       <Route path="/login">
         <Login />
