@@ -28,6 +28,13 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(posts);
         }
 
+        [HttpGet]
+        public IActionResult GetByUserId(int id)
+        {
+            var posts = _repo.GetByUserId(id);
+            return Ok(posts);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
