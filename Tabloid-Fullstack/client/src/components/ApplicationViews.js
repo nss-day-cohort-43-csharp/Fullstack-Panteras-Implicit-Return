@@ -7,7 +7,6 @@ import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import NotFound from "../pages/NotFound";
-import { userTypeId } from '../providers/UserProfileProvider';
 
 const ApplicationViews = () => {
   const { isLoggedIn } = useContext(UserProfileContext);
