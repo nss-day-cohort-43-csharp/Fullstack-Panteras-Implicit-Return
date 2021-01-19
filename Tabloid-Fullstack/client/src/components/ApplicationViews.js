@@ -21,6 +21,9 @@ const ApplicationViews = () => {
       <Route path="/post/:postId">
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
       </Route>
+      <Route path="/tags">
+        {isLoggedIn ? <TagManager /> : <Redirect to="/login" />}
+      </Route>
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
       </Route>
