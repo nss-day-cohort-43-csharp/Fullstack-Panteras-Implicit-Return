@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PostList from "../components/PostList";
+import PostList from "../components/posts/PostList";
 
 const Explore = () => {
   const [posts, setPosts] = useState([]);

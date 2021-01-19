@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Jumbotron } from "reactstrap";
-import PostReactions from "../components/PostReactions";
+import PostReactions from "../components/posts/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import "./PostDetails.css";
 
