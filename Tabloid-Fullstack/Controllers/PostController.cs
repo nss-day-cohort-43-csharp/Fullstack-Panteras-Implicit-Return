@@ -28,6 +28,8 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(posts);
         }
 
+        //GetByUserId by Sam Edwards
+        //Doesn't work yet because it needs a parameter
         [HttpGet]
         public IActionResult GetByUserId(int id)
         {
