@@ -11,7 +11,7 @@ import { UserProfileContext } from "../providers/UserProfileProvider";
 
 const TagManager = () => {
   const { getToken } = useContext(UserProfileContext);
-  const [tag, setTags] = useState([]);
+  const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState("");
 
   useEffect(() => {
@@ -27,13 +27,13 @@ const TagManager = () => {
         },
       })
         .then((res) => res.json())
-        .then((tag) => {
-          setCategories(tags);
+        .then((tags) => {
+          setTags(tags);
         })
     );
   };
 
-  const saveNewTags = () => {
+  const saveNewTag = () => {
     const tagToAdd = { name: newTag };
     getToken().then((token) =>
       fetch("/api/tag", {
@@ -44,7 +44,7 @@ const TagManager = () => {
         },
         body: JSON.stringify(tagToAdd),
       }).then(() => {
-        setNewTagCategory("");
+        setNewTag("");
         getTags();
       })
     );
@@ -71,7 +71,7 @@ const TagManager = () => {
           <div className="my-4">
             <InputGroup>
               <Input
-                onChange={(e) => setNewTagCategory(e.target.value)}
+                onChange={(e) => setNewTag(e.target.value)}
                 value={newTag}
                 placeholder="Add a new tag"
               />
