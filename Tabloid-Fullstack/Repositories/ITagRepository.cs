@@ -6,7 +6,7 @@ using Tabloid_Fullstack.Models;
 
 namespace Tabloid_Fullstack.Repositories
 {
-    interface ITagRepository
+    public interface ITagRepository
     {
         void Add(Tag tag);
         List<Tag> GetAll();
