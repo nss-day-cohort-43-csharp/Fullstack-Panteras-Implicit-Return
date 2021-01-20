@@ -19,7 +19,7 @@ namespace Tabloid_Fullstack.Repositories
         {
             {
                 return _context.Comment
-                    .Where(c => c.PostId == PostId)
+                    .Where(c => c.PostId == PostId) 
                     .OrderBy(c => c.CreateDateTime)
                     .ToList();
             }

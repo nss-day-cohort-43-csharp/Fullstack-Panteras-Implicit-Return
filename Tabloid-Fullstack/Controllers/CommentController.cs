@@ -8,6 +8,8 @@ using Tabloid_Fullstack.Repositories;
 
 namespace Tabloid_Fullstack.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CommentController : Controller
     {
         public readonly ICommentRepository _commentRepository;
