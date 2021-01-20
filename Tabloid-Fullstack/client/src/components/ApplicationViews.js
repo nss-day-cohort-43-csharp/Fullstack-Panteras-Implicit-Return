@@ -7,10 +7,11 @@ import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import MyPosts from "../pages/MyPosts";
+import TagManager from "../pages/TagManager";
 import NotFound from "../pages/NotFound";
 
 const ApplicationViews = () => {
-  const { isLoggedIn } = useContext(UserProfileContext);
+  const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
 
   return (
     <Switch>
@@ -25,6 +26,9 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/post/:postId">
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/tags">
+        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />}
       </Route>
       <Route path="/categories">
         {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1? <CategoryManager /> : <Redirect to="/notfound" />}
