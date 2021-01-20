@@ -29,8 +29,7 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         //GetByUserId by Sam Edwards
-        //Doesn't work yet because it needs a parameter
-        [HttpGet]
+        [HttpGet("getbyuserid/{id}")]
         public IActionResult GetByUserId(int id)
         {
             var posts = _repo.GetByUserId(id);
