@@ -22,8 +22,17 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet("{PostId}")]
         public IActionResult Get(int PostId)
         {
-            return Ok(_commentRepository.GetAll(PostId));
+            return Ok(_commentRepository.GetAllByPostId(PostId));
         }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            return Ok(_commentRepository.GetAll());
+        }
+
+
+
 
 
         // GET: CommentController
