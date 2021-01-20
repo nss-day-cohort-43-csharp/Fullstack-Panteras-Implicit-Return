@@ -30,8 +30,6 @@ const MyPosts = () => {
         return null
     }
 
-    console.log(myPosts)
-
     return ( 
         <>
         <h1>My Posts</h1>
