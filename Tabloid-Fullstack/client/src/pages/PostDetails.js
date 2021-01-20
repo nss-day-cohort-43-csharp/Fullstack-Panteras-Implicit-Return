@@ -50,6 +50,14 @@ const PostDetails = () => {
             <p>{formatDate(post.publishDateTime)}</p>
           </div>
         </div>
+        <div>
+          <Post post={post} />
+          <ListGroup>
+            {comments.map((c) => (
+              <ListGroupItem>{c.subject}</ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
         <div className="text-justify post-details__content">{post.content}</div>
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
