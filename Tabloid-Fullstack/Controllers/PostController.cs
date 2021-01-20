@@ -14,10 +14,12 @@ namespace Tabloid_Fullstack.Controllers
     {
 
         private IPostRepository _repo;
+        private IUserProfileRepository _userRepo;
 
-        public PostController(IPostRepository repo)
+        public PostController(IPostRepository repo, IUserProfileRepository userRepo)
         {
             _repo = repo;
+            _userRepo = userRepo;
         }
 
 
@@ -32,7 +34,8 @@ namespace Tabloid_Fullstack.Controllers
         public IActionResult GetById(int id)
         {
             var post = _repo.GetById(id);
-            if (post == null || post.IsApproved == false)
+            var user = _userRepo.GetByUserProfileId(post.UserProfileId);
+            if (post == null || post.IsApproved)
             {
                 return NotFound();
             }

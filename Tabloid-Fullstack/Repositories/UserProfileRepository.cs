@@ -27,6 +27,13 @@ namespace Tabloid_Fullstack.Repositories
 
         }
 
+        public UserProfile GetByUserProfileId(int id)
+        {
+            UserProfile user = _context.UserProfile
+                .FirstOrDefault(uid => uid.Id == id);
+            return user;
+        }
+
         public void Add(UserProfile userProfile)
         {
             _context.Add(userProfile);
