@@ -7,6 +7,7 @@ import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import NotFound from "../pages/NotFound";
+import CommentDetails from "../pages/CommentDetails";
 
 const ApplicationViews = () => {
   const { isLoggedIn } = useContext(UserProfileContext);
@@ -22,8 +23,12 @@ const ApplicationViews = () => {
       <Route path="/post/:postId">
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
       </Route>
+
+      <Route path="/comment/:postId">
+        {isLoggedIn ? <CommentDetails /> : <Redirect to="/login" />}
+      </Route>
       <Route path="/categories">
-        {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1? <CategoryManager /> : <Redirect to="/notfound" />}
+        {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1 ? <CategoryManager /> : <Redirect to="/notfound" />}
       </Route>
       <Route path="/login">
         <Login />
@@ -31,7 +36,7 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
-      <Route component={NotFound}/>
+      <Route component={NotFound} />
     </Switch>
   );
 };

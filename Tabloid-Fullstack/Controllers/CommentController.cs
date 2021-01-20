@@ -33,8 +33,6 @@ namespace Tabloid_Fullstack.Controllers
 
 
 
-
-
         // GET: CommentController
         public ActionResult Index()
         {

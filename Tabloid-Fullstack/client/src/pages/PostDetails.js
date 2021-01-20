@@ -51,12 +51,14 @@ const PostDetails = () => {
           </div>
         </div>
         <div>
-          <Post post={post} />
+          {/* <Post post={post} />
           <ListGroup>
             {comments.map((c) => (
               <ListGroupItem>{c.subject}</ListGroupItem>
             ))}
-          </ListGroup>
+          </ListGroup> */}
+
+          <a href={`/comment/${post.id}`} className="btn btn-outline-primary mx-1">View Comments</a>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         <div className="my-4">
