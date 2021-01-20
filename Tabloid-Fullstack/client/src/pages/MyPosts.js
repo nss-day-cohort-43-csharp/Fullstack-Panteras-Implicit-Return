@@ -33,7 +33,7 @@ const MyPosts = () => {
     return ( 
         <>
         <h1>My Posts</h1>
-        <PostList posts={myPosts} />
+        { myPosts.length > 0 ? <PostList posts={myPosts} /> : <p>You don't have any posts yet!</p> }
         </>
     )
 }
