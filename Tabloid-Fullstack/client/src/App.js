@@ -4,6 +4,7 @@ import { UserProfileProvider } from "./providers/UserProfileProvider";
 import { ToastContainer } from "react-toastify";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import 'semantic-ui-css/semantic.min.css'
 import AppHeader from "./components/AppHeader";
 
 function App() {

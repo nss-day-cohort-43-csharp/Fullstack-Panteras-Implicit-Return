@@ -16,6 +16,7 @@ const CategoryManager = () => {
 
   useEffect(() => {
     getCategories();
+    
   }, []);
 
   const getCategories = () => {
