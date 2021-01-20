@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
 
 const MyPosts = () => {
 
-    const userId = localStorage.getItem("userProfile").id;
+    const userId = localStorage.getItem("userProfileId");
     const [myPosts, setMyPosts] = useState([]);
 
     useEffect(() => {
