@@ -9,7 +9,7 @@ import CategoryManager from "../pages/CategoryManager";
 import TagManager from "../pages/TagManager";
 
 const ApplicationViews = () => {
-  const { isLoggedIn } = useContext(UserProfileContext);
+  const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
 
   return (
     <Switch>
@@ -23,7 +23,7 @@ const ApplicationViews = () => {
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
       </Route>
       <Route path="/tags">
-        {isLoggedIn ? <TagManager /> : <Redirect to="/login" />}
+        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />}
       </Route>
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
