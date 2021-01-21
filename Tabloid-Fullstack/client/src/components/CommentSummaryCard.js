@@ -11,17 +11,17 @@ const CommentSummaryCard = ({ comment }) => {
                 <div className="col-lg-5 col-sm-12 py-3">
                     <div>
                         {/* <Link to={`/comment/${comment.Id}`}> */}
-                        <h2>{comment.subject}</h2>
+                        <h4> {comment.subject}</h4>
                         {/* </Link> */}
-                        <strong className="text-danger">{comment.content}</strong>
+                        <h6>{comment.content}</h6>
                     </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 mt-2 py-3 text-left">
                     <p className="ml-5">
-                        Published on: {formatDate(comment.createDateTime)}
+                        <h6>Published on: {formatDate(comment.createDateTime)}</h6>
                     </p>
                     <p className="ml-5">
-                        User Profile: {comment.userProfile.displayName}
+                        <h6>Author: {comment.userProfile.displayName}</h6>
                     </p>
                 </div>
             </div>

@@ -74,6 +74,7 @@ const PostDetails = () => {
       </div>
 
       <div>
+        <h4>Comments</h4>
         <Container>
           {comment.map((c) => {
             return <div><CommentSummaryCard comment={c} /></div>
