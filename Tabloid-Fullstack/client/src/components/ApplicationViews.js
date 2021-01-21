@@ -29,7 +29,7 @@ const ApplicationViews = () => {
         {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/notfound" />}
       </Route>
       <Route path="/categories">
-        {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1? <CategoryManager /> : <Redirect to="/notfound" />}
+        {isLoggedIn && isAdmin() ? <CategoryManager /> : <Redirect to="/notfound" />}
       </Route>
       <Route path="/login">
         <Login />
