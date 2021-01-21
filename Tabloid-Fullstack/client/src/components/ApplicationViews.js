@@ -25,7 +25,7 @@ const ApplicationViews = () => {
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
       </Route>
       <Route path="/tags">
-        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />}
+        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/notfound" />}
       </Route>
 
       <Route path="/comment/:postId">
