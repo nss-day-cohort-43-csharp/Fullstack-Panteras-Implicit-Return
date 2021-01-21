@@ -6,11 +6,12 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
+import TagManager from "../pages/TagManager";
 import NotFound from "../pages/NotFound";
 import CommentList from "./CommentList";
 
 const ApplicationViews = () => {
-  const { isLoggedIn } = useContext(UserProfileContext);
+  const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
 
   return (
     <Switch>
@@ -22,6 +23,9 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/post/:postId">
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/tags">
+        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />}
       </Route>
 
       <Route path="/comment/:postId">
