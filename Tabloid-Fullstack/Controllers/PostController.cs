@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Tabloid_Fullstack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PostController : ControllerBase
     {
 
@@ -36,7 +38,7 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{postId}/{userId}")]
         public IActionResult GetById(int id)
         {
             var post = _repo.GetById(id);

@@ -1,28 +1,33 @@
 // Authored by Sam Edwards
 // MyPosts displays all posts by the current UserId
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { toast } from "react-toastify"
 import PostList from "../components/posts/PostList"
-
+import { UserProfileContext } from "../providers/UserProfileProvider"
 
 const MyPosts = () => {
+
+    const { getToken } = useContext(UserProfileContext)
 
     const userId = localStorage.getItem("userProfileId");
     const [myPosts, setMyPosts] = useState([]);
 
     useEffect(() => {
         if (userId !== null) {
-            fetch(`/api/post/getbyuserid/${userId}`)
-                .then(res => {
-                    if (res.status === 404) {
-                        toast.error("Couldn't get your posts")
-                        return
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    setMyPosts(data)
-                })
+            getToken().then((token) => 
+                fetch(`/api/post/getbyuserid/${userId}`)
+                    .then(res => {
+                        if (res.status === 404) {
+                            toast.error("Couldn't get your posts")
+                            return
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        setMyPosts(data)
+                    })
+            
+            )
         }
     }, [])
 
