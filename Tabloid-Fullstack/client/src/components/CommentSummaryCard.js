@@ -21,7 +21,7 @@ const CommentSummaryCard = ({ comment }) => {
                         <h6>Published on: {formatDate(comment.createDateTime)}</h6>
                     </div>
                     <div className="ml-5">
-                        <h6>Author: {comment.userdivrofile.displayName}</h6>
+                        <h6>Author: {comment.userProfile.displayName}</h6>
                     </div>
                 </div>
             </div>
