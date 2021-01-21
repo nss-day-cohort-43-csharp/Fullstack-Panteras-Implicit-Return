@@ -1,7 +1,9 @@
+// page not currently in use
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import formatDate from "../utils/dateFormatter";
+// import formatDate from "../utils/dateFormatter";
 import "./PostDetails.css";
 
 const CommentDetails = () => {
@@ -25,6 +27,38 @@ const CommentDetails = () => {
     // console.log(comment);
     if (!comment) return null;
 
+    const getComments = () => {
+        getToken().then((token) =>
+            fetch(`/api/comment`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((res) => res.json())
+                .then((comments) => {
+                    setComments(comments);
+                })
+        );
+    }
+};
+
+const saveNewComment = () => {
+    const commentToAdd = { name: newComment };
+    getToken().then((token) =>
+        fetch("/api/comment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(commentToAdd),
+        }).then(() => {
+            setNewCategory("");
+            getCategories();
+        })
+    );
+
     return (
         <div>
             <div className="container">
@@ -36,8 +70,19 @@ const CommentDetails = () => {
                     {/* <p className="d-inline-block">{post.userProfile.displayName}</p> */}
 
                     <div className="col">
-                        {/* <p>{formatDate(comment.CreatedDateTime)}</p> */}
+                        {/* <p>{formatDate(comment.CreateDateTime)}</p> */}
                     </div>
+                </div>
+
+                <div className="my-4">
+                    <InputGroup>
+                        <Input
+                            onChange={(e) => setNewComment(e.target.value)}
+                            value={newComment}
+                            placeholder="Add a new comment"
+                        />
+                        <Button onClick={saveNewComment}>Save</Button>
+                    </InputGroup>
                 </div>
             </div>
         </div>

@@ -40,7 +40,7 @@ const Comment = ({ comment }) => {
                             <Button onClick={showEditForm}>Save</Button>
                             <Button outline color="danger" onClick={hideEditForm}>
                                 Cancel
-              </Button>
+                            </Button>
                         </ButtonGroup>
                     </InputGroup>
                 </Form>
@@ -50,13 +50,13 @@ const Comment = ({ comment }) => {
                         <ButtonGroup size="sm">
                             <Button className="btn btn-primary" onClick={showEditForm}>
                                 Edit
-            </Button>
+                        </Button>
                             <Button
                                 className="btn btn-danger"
                                 onClick={(e) => setPendingDelete(true)}
                             >
                                 Delete
-            </Button>
+                            </Button>
                         </ButtonGroup>
                     </>
                 )}

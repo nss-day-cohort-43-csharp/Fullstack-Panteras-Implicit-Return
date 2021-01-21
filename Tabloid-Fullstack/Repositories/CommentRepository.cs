@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tabloid_Fullstack.Repositories
 {
@@ -21,6 +22,7 @@ namespace Tabloid_Fullstack.Repositories
                 return _context.Comment
                     .Where(c => c.PostId == PostId) 
                     .OrderBy(c => c.CreateDateTime)
+                    .Include(c => c.UserProfile)
                     .ToList();
             }
         }

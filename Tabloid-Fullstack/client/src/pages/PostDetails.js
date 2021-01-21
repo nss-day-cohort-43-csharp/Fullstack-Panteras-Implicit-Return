@@ -79,7 +79,9 @@ const PostDetails = () => {
             return <div><CommentSummaryCard comment={c} /></div>
           })
           }
+
         </Container>
+
       </div>
     </div>
 
