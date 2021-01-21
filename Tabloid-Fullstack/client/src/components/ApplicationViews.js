@@ -8,7 +8,6 @@ import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import TagManager from "../pages/TagManager";
 import NotFound from "../pages/NotFound";
-import CommentList from "./CommentList";
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -26,10 +25,6 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/tags">
         {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/notfound" />}
-      </Route>
-
-      <Route path="/comment/:postId">
-        {isLoggedIn ? <CommentList /> : <Redirect to="/login" />}
       </Route>
 
       <Route path="/categories">
