@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Jumbotron } from "reactstrap";
 import PostReactions from "../components/PostReactions";
 import formatDate from "../utils/dateFormatter";
+import CommentDetails from "./CommentDetails";
 import "./PostDetails.css";
 
 const PostDetails = () => {
@@ -59,6 +60,9 @@ const PostDetails = () => {
           </ListGroup> */}
 
           <a href={`/comment/${post.id}`} className="btn btn-outline-primary mx-1">View Comments</a>
+
+          {/* <CommentDetails /> */}
+
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         <div className="my-4">

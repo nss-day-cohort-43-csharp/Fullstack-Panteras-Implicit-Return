@@ -7,7 +7,7 @@ import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import NotFound from "../pages/NotFound";
-import CommentDetails from "../pages/CommentDetails";
+import CommentList from "./CommentList";
 
 const ApplicationViews = () => {
   const { isLoggedIn } = useContext(UserProfileContext);
@@ -25,8 +25,9 @@ const ApplicationViews = () => {
       </Route>
 
       <Route path="/comment/:postId">
-        {isLoggedIn ? <CommentDetails /> : <Redirect to="/login" />}
+        {isLoggedIn ? <CommentList /> : <Redirect to="/login" />}
       </Route>
+
       <Route path="/categories">
         {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1 ? <CategoryManager /> : <Redirect to="/notfound" />}
       </Route>

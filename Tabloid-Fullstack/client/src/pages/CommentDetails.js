@@ -18,23 +18,25 @@ const CommentDetails = () => {
                 return res.json();
             })
             .then((data) => {
-                setComment(data.comment);
+                setComment(data);
+                console.log(data);
             });
     }, [postId]);
-
+    // console.log(comment);
     if (!comment) return null;
 
     return (
         <div>
             <div className="container">
-                <h1>{comment.subject}</h1>
-                <h5 className="text-danger">{comment.content}</h5>
+
+                <h1>{comment[0].subject}</h1>
+                {/* <h5 className="text-danger">{comment.content}</h5> */}
                 <div className="row">
 
                     {/* <p className="d-inline-block">{post.userProfile.displayName}</p> */}
 
                     <div className="col">
-                        <p>{formatDate(comment.CreatedDateTime)}</p>
+                        {/* <p>{formatDate(comment.CreatedDateTime)}</p> */}
                     </div>
                 </div>
             </div>
