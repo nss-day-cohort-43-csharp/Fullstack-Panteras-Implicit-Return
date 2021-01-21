@@ -1,3 +1,5 @@
+// Authored by: Terra Roush
+
 import React, { useState } from "react";
 import {
   Button,

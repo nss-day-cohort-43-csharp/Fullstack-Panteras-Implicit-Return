@@ -1,3 +1,5 @@
+// Additions by: Terra Roush, 
+
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { UserProfileContext } from "../providers/UserProfileProvider";
