@@ -28,6 +28,7 @@ const ApplicationViews = () => {
       <Route path="/tags">
         {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/notfound" />}
       </Route>
+
       <Route path="/categories">
         {isLoggedIn && isAdmin() ? <CategoryManager /> : <Redirect to="/notfound" />}
       </Route>
@@ -37,7 +38,7 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
-      <Route component={NotFound}/>
+      <Route component={NotFound} />
     </Switch>
   );
 };
