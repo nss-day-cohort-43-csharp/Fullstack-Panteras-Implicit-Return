@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Jumbotron } from "reactstrap";
 import PostReactions from "../components/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import "./PostDetails.css";
+import  { UserProfileContext } from '../providers/UserProfileProvider';
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
+  const { getToken } = useContext(UserProfileContext);
   const history = useHistory();
 
   useEffect(() => {
-    fetch(`/api/post/${postId}`)
+    return getToken().then((token) =>
+    fetch(`/api/post/${postId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then((res) => {
         if (res.status === 404) {
           toast.error("This isn't the post you're looking for");
@@ -27,7 +35,7 @@ const PostDetails = () => {
           setPost(data ? data.post : null);
           setReactionCounts(data.reactionCounts);
         }
-      });
+      }));
   }, [postId]);
 
   if (!post) return null;
