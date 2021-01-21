@@ -1,4 +1,5 @@
 import React from "react";
+import { TagCard } from "./TagCard";
 
 const TagList = ({ tags }) => {
   return (
