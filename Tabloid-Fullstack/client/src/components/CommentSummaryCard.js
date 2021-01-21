@@ -5,6 +5,7 @@ import formatDate from "../utils/dateFormatter";
 import "./PostSummaryCard.css";
 
 const CommentSummaryCard = ({ comment }) => {
+    // debugger
     return (
         <Card className="post-summary__card">
             <div className="row">
@@ -19,7 +20,7 @@ const CommentSummaryCard = ({ comment }) => {
                 </div>
                 <div className="col-lg-4 col-sm-12 mt-2 py-3 text-left">
                     <p className="ml-5">
-                        Published on {formatDate(comment.CreatedDateTime)}
+                        {/* Published on {formatDate(comment.CreatedDateTime)} */}
                     </p>
                 </div>
             </div>

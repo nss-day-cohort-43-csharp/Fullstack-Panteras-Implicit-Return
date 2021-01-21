@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Jumbotron } from "reactstrap";
+import { Container, Jumbotron } from "reactstrap";
+import CommentSummaryCard from "../components/CommentSummaryCard";
 import PostReactions from "../components/PostReactions";
 import formatDate from "../utils/dateFormatter";
-import CommentDetails from "./CommentDetails";
 import "./PostDetails.css";
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
+  const [comment, setComment] = useState();
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -27,7 +28,22 @@ const PostDetails = () => {
       });
   }, [postId]);
 
+  useEffect(() => {
+    fetch(`/api/comment/${postId}`)
+      .then((res) => {
+        if (res.status === 404) {
+          toast.error("Comment unavailable");
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setComment(data);
+      });
+  }, [postId]);
+
   if (!post) return null;
+  if (!comment) return null;
 
   return (
     <div>
@@ -51,25 +67,22 @@ const PostDetails = () => {
             <p>{formatDate(post.publishDateTime)}</p>
           </div>
         </div>
-        <div>
-          {/* <Post post={post} />
-          <ListGroup>
-            {comments.map((c) => (
-              <ListGroupItem>{c.subject}</ListGroupItem>
-            ))}
-          </ListGroup> */}
-
-          <a href={`/comment/${post.id}`} className="btn btn-outline-primary mx-1">View Comments</a>
-
-          {/* <CommentDetails /> */}
-
-        </div>
         <div className="text-justify post-details__content">{post.content}</div>
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
       </div>
+
+      <div>
+        <Container>
+          {comment.map((c) => {
+            return <div><CommentSummaryCard comment={c} /></div>
+          })
+          }
+        </Container>
+      </div>
     </div>
+
   );
 };
 
