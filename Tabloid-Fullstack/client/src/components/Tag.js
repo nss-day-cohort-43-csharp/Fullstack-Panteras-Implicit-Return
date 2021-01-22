@@ -1,3 +1,5 @@
+// Authored by: Terra Roush
+
 import React, { useState } from "react";
 import {
   Button,
@@ -69,6 +71,7 @@ const Tag = ({ tag }) => {
         </ModalBody>
         <ModalFooter>
           <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
+          {/* need onclick event to fire off delete method */}
           <Button className="btn btn-outline-danger">Yes, Delete</Button>
         </ModalFooter>
       </Modal>
