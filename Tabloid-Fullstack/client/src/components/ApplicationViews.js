@@ -1,3 +1,5 @@
+// Additions by: Terra Roush, 
+
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { UserProfileContext } from "../providers/UserProfileProvider";
@@ -28,10 +30,11 @@ const ApplicationViews = () => {
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
       </Route>
       <Route path="/tags">
-        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />}
+        {isLoggedIn && isAdmin() ? <TagManager /> : !isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/notfound" />}
       </Route>
+
       <Route path="/categories">
-        {isLoggedIn && JSON.parse(localStorage.getItem("userProfile")).userTypeId === 1? <CategoryManager /> : <Redirect to="/notfound" />}
+        {isLoggedIn && isAdmin() ? <CategoryManager /> : <Redirect to="/notfound" />}
       </Route>
       <Route path="/login">
         <Login />
@@ -39,7 +42,7 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
-      <Route component={NotFound}/>
+      <Route component={NotFound} />
     </Switch>
   );
 };

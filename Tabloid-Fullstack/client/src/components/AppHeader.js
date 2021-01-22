@@ -1,3 +1,5 @@
+// Additions by: Terra Roush, 
+
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";

@@ -1,32 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Jumbotron } from "reactstrap";
-import PostReactions from "../components/posts/PostReactions";
+import { Container, Jumbotron } from "reactstrap";
+import CommentSummaryCard from "../components/CommentSummaryCard";
+import PostReactions from "../components/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import "./PostDetails.css";
+import { UserProfileContext } from '../providers/UserProfileProvider';
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
+  const [comment, setComment] = useState();
+  const { getToken } = useContext(UserProfileContext);
+  const history = useHistory();
 
   useEffect(() => {
-    fetch(`/api/post/${postId}`)
+    return getToken().then((token) =>
+      fetch(`/api/post/${postId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((res) => {
+          if (res.status === 404) {
+            toast.error("This isn't the post you're looking for");
+            history.push("/explore")
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data) {
+            setPost(data ? data.post : null);
+            setReactionCounts(data.reactionCounts);
+          }
+        }));
+  }, [postId]);
+
+  useEffect(() => {
+    fetch(`/api/comment/${postId}`)
       .then((res) => {
         if (res.status === 404) {
-          toast.error("This isn't the post you're looking for");
+          toast.error("Comment unavailable");
           return;
         }
         return res.json();
       })
       .then((data) => {
-        setPost(data.post);
-        setReactionCounts(data.reactionCounts);
+        setComment(data);
       });
   }, [postId]);
 
   if (!post) return null;
+  if (!comment) return null;
 
   return (
     <div>
@@ -55,7 +84,20 @@ const PostDetails = () => {
           <PostReactions postReactions={reactionCounts} />
         </div>
       </div>
+
+      <div>
+        <h4>Comments</h4>
+        <Container>
+          {comment.map((c) => {
+            return <div key={c.id}><CommentSummaryCard comment={c} /></div>
+          })
+          }
+
+        </Container>
+
+      </div>
     </div>
+
   );
 };
 

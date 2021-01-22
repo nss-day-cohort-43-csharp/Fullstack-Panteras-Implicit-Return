@@ -3,20 +3,29 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
+using Tabloid_Fullstack.Controllers.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tabloid_Fullstack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TagController : ControllerBase
     {
+     
         private ITagRepository _tagRepository;
-        public TagController(ITagRepository tagRepository)
+        private IUserProfileRepository _userProfileRepository;
+
+        public TagController(ITagRepository tagRepository, IUserProfileRepository userProfileRepository)
         {
             _tagRepository = tagRepository;
+            _userProfileRepository = userProfileRepository;
+
         }
 
         [HttpGet]
@@ -40,6 +49,11 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Add(Tag tag)
         {
+            var storedUser = ControllerUtils.GetCurrentUserProfile(_userProfileRepository, User);
+            if (storedUser.UserTypeId != 1)
+            {
+                return NotFound();
+            }
             _tagRepository.Add(tag);
             return Ok(tag);
         }
