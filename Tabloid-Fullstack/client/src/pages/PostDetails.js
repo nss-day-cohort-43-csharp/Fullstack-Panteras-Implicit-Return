@@ -3,10 +3,10 @@ import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container, Jumbotron } from "reactstrap";
 import CommentSummaryCard from "../components/CommentSummaryCard";
-import PostReactions from "../components/PostReactions";
+import PostReactions from "../components/posts/PostReactions";
 import formatDate from "../utils/dateFormatter";
-import "./PostDetails.css";
 import { UserProfileContext } from '../providers/UserProfileProvider';
+import "./PostDetails.css";
 
 const PostDetails = () => {
   const { postId } = useParams();

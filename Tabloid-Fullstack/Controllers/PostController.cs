@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Models.ViewModels;
 using Tabloid_Fullstack.Repositories;
+using Tabloid_Fullstack.Controllers.Utils;
 
 namespace Tabloid_Fullstack.Controllers
 {
@@ -16,11 +17,6 @@ namespace Tabloid_Fullstack.Controllers
     [Authorize]
     public class PostController : ControllerBase
     {
-        private UserProfile GetCurrentUserProfile()
-        {
-            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userRepo.GetByFirebaseUserId(firebaseUserId);
-        }
         private IPostRepository _repo;
         private IUserProfileRepository _userRepo;
 
@@ -49,7 +45,7 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet("{postId}/{userId}")]
         public IActionResult GetById(int id)
         {
-            var firebaseUser = GetCurrentUserProfile();
+            var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
             var post = _repo.GetById(id);
             if (post == null)
             {

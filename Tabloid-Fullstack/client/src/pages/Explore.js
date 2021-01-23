@@ -1,16 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { UserProfileContext } from "../providers/UserProfileProvider"
 import PostList from "../components/posts/PostList";
 
 const Explore = () => {
+
   const [posts, setPosts] = useState([]);
+  const { getToken } = useContext(UserProfileContext);
 
   useEffect(() => {
-    fetch("/api/post")
-      .then((res) => res.json())
-      .then((posts) => {
-        setPosts(posts);
-      });
-  }, []);
+    return getToken().then(token =>
+      fetch("/api/post", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 401) {
+          // Maybe return a message if an error occurs?
+        }
+        return res.json()
+      })
+      .then(posts => setPosts(posts))
+  )}, []);
 
   return (
     <div className="row">
