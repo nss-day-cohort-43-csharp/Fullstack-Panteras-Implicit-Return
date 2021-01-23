@@ -35,10 +35,17 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         //GetByUserId by Sam Edwards
-        [HttpGet("getbyuserid/{id}")]
-        public IActionResult GetByUserId(int id)
+        [HttpGet("getbyuserid")]
+        public IActionResult GetByUserId()
         {
-            var posts = _repo.GetByUserId(id);
+            // We are able to get the UserProfile because in this GET request, the
+            // useEffect from the React client sends the JSON Web Token (JWT), which we're able to access
+            // from the User ClaimsPrincipal object
+
+            // If they are not logged in, they never make it this far into the method
+            // so no need to have a try/catch or if statement for if it returns null
+            var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
+            var posts = _repo.GetByUserId(firebaseUser.Id);
             return Ok(posts);
         }
 

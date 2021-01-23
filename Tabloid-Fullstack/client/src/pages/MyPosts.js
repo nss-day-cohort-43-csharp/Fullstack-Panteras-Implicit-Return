@@ -6,7 +6,8 @@ import PostList from "../components/posts/PostList"
 import { UserProfileContext } from "../providers/UserProfileProvider"
 
 const MyPosts = () => {
-
+    // Get token retrieves the JWT and sends it up in the useEffect
+    // to ensure only authorized users can view MyPosts
     const { getToken } = useContext(UserProfileContext)
 
     const userId = localStorage.getItem("userProfileId");
@@ -14,8 +15,14 @@ const MyPosts = () => {
 
     useEffect(() => {
         if (userId !== null) {
+            // Send token up in body of GET request as a Header
             getToken().then((token) => 
-                fetch(`/api/post/getbyuserid/${userId}`)
+                fetch(`/api/post/getbyuserid`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
                     .then(res => {
                         if (res.status === 404) {
                             toast.error("Couldn't get your posts")
