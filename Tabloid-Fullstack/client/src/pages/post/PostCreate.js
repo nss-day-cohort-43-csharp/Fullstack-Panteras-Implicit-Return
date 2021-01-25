@@ -9,6 +9,15 @@ const PostCreate = ({ editablePost }) => {
     const [post, setPost] = useState("");
 
     const userId = +localStorage.getItem("userProfileId");
+
+    const emptyPostForResetting = {
+        title: "",
+        content: "",
+        categoryId: 0,
+        imageLocation: "",
+        imageLocation: "",
+        publishDateTime: ""
+    }
   
     useEffect(() => {
       getCategories();
@@ -29,6 +38,19 @@ const PostCreate = ({ editablePost }) => {
       );
     };
 
+    const addPost = submittedPost => {
+        getToken().then(token => 
+            fetch(`/api/post`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(submittedPost)
+            })
+        ).then(setPost(emptyPostForResetting))
+    }
+
     const handleControlledInputChange = e => {
         const newPost = { ...post }
         newPost[e.target.name] = e.target.value
@@ -37,18 +59,13 @@ const PostCreate = ({ editablePost }) => {
 
     const constructNewPost = (e) => {
         // Check to ensure category Id is not 0, if it is 0, show error toast message
-        const newPost = {
-            userId,
-            title: post.title,
-            content: post.content,
-            categoryId: +post.categoryId,
-            imageLocation: post.imageLocation,
-            publishDateTime: post.publishDateTime
+        
+        if (post.imageLocation === undefined) {
+            const defaultImg = "http://lorempixel.com/920/360/"
+            post.imageLocation = defaultImg
         }
 
-        console.log("YOUR NEW POST: ", newPost)
-
-        if (!editablePost) {
+        if (editablePost !== undefined) {
             // updatePost({
             //     id: editablePost.id,
             //     userId,
@@ -59,14 +76,15 @@ const PostCreate = ({ editablePost }) => {
             //     publishDateTime: post.publishDateTime
             // })
         } else {
-            // createPost({
-            //     userId,
-            //     title: post.title,
-            //     content: post.content,
-            //     categoryId: post.categoryId,
-            //     imageLocation: post.imageLocation,
-            //     publishDateTime: post.publishDateTime
-            // })
+            addPost({
+                userProfileId: userId,
+                title: post.title,
+                content: post.content,
+                categoryId: +post.categoryId,
+                imageLocation: post.imageLocation,
+                publishDateTime: post.publishDateTime,
+                IsApproved: true
+            })
         }
     }
 
@@ -79,6 +97,7 @@ const PostCreate = ({ editablePost }) => {
         return null
     }
 
+    // MAX LENGTH REQUIRED FOR TITLE AND CONTENT
     return (
         <div className="container mt-5">
             <h1>Create Post</h1>
@@ -87,9 +106,10 @@ const PostCreate = ({ editablePost }) => {
                     <label htmlFor="postTitle">Title: </label>
                     <input
                     onChange={handleControlledInputChange}
+                    maxLength="255"
                     id="postTitle"
                     name="title"
-                    value={post.name}
+                    value={post.title}
                     placeholder="Add Post Title"
                     required />
                 </fieldset>
@@ -136,6 +156,7 @@ const PostCreate = ({ editablePost }) => {
                     type="date"
                     id="postDate"
                     name="publishDateTime"
+                    value={post.publishDateTime}
                     placeholder=""></input>
                </fieldset>
                 <button type="submit">Submit</button>
