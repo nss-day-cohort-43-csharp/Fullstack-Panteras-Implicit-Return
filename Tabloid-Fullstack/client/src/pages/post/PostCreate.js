@@ -3,10 +3,12 @@
 import React, { useContext, useEffect, useState } from "react"
 import { UserProfileContext } from "../../providers/UserProfileProvider"
 
-const PostCreate = () => {
+const PostCreate = ({ editablePost }) => {
     const { getToken } = useContext(UserProfileContext)
     const [categories, setCategories] = useState([]);
     const [post, setPost] = useState("");
+
+    const userId = +localStorage.getItem("userProfileId");
   
     useEffect(() => {
       getCategories();
@@ -33,9 +35,44 @@ const PostCreate = () => {
         setPost(newPost)
     }
 
+    const constructNewPost = (e) => {
+        // Check to ensure category Id is not 0, if it is 0, show error toast message
+        const newPost = {
+            userId,
+            title: post.title,
+            content: post.content,
+            categoryId: +post.categoryId,
+            imageLocation: post.imageLocation,
+            publishDateTime: post.publishDateTime
+        }
+
+        console.log("YOUR NEW POST: ", newPost)
+
+        if (!editablePost) {
+            // updatePost({
+            //     id: editablePost.id,
+            //     userId,
+            //     title: post.title,
+            //     content: post.content,
+            //     categoryId: post.categoryId,
+            //     imageLocation: post.imageLocation,
+            //     publishDateTime: post.publishDateTime
+            // })
+        } else {
+            // createPost({
+            //     userId,
+            //     title: post.title,
+            //     content: post.content,
+            //     categoryId: post.categoryId,
+            //     imageLocation: post.imageLocation,
+            //     publishDateTime: post.publishDateTime
+            // })
+        }
+    }
+
     const createPost = (e) => {
         e.preventDefault()
-        // constructNewPost(e)
+        constructNewPost(e)
     }
 
     if (!categories) {
@@ -69,11 +106,16 @@ const PostCreate = () => {
                    required />
                </fieldset>
                <fieldset>
-                <label htmlFor="">Categories: </label>
-                    <select required>
-                        <option id="0">Choose a category</option>
+                    <label htmlFor="postCategories">Categories: </label>
+                    <select
+                    onChange={handleControlledInputChange}
+                    id="postCategories"
+                    name="categoryId"
+                    value={post.categoryId}
+                    required >
+                        <option value="0">Choose a category</option>
                         {categories.map(c => (
-                            <option value={c.name} key={c.id}>{c.name}</option>
+                            <option value={c.id} key={c.id}>{c.name}</option>
                         ))}
                     </select>
                </fieldset>
@@ -84,16 +126,16 @@ const PostCreate = () => {
                    id="postHeader"
                    name="imageLocation"
                    value={post.imageLocation}
-                   placeholder="https://www.IMAGE-LINK.com"
+                   placeholder="Add image URL"
                    />
                </fieldset>
                <fieldset>
                    <label htmlFor="PublishDateTime">(Optional) Publication Date</label>
                     <input
-                    type="date"
                     onChange={handleControlledInputChange}
+                    type="date"
                     id="postDate"
-                    name="PublishDateTime"
+                    name="publishDateTime"
                     placeholder=""></input>
                </fieldset>
                 <button type="submit">Submit</button>
