@@ -4,9 +4,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tabloid_Fullstack.Data;
 
 
@@ -27,6 +25,8 @@ namespace Tabloid_Fullstack.Tests
 
     public abstract class EFTestFixture : IDisposable
     {
+        // Sets database to in memory
+        // Use SQL Lite because it's so small
         private const string _connectionString = "DataSource=:memory:";
         private readonly SqliteConnection _connection;
 
