@@ -13,7 +13,7 @@ import {
   ModalHeader,
 } from "reactstrap";
 
-const Tag = ({ tag }) => {
+const Tag = ({ tag, saveUpdatedTag }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [tagEdits, setTagEdits] = useState("");
@@ -21,6 +21,11 @@ const Tag = ({ tag }) => {
   const showEditForm = () => {
     setIsEditing(true);
     setTagEdits(tag.name);
+  };
+  const saveEditForm = () => {
+    saveUpdatedTag(tagEdits, tag.id);
+    setIsEditing(false);
+    // setTagEdits(tag.name);
   };
 
   const hideEditForm = () => {
@@ -39,7 +44,7 @@ const Tag = ({ tag }) => {
               value={tagEdits}
             />
             <ButtonGroup size="sm">
-              <Button onClick={showEditForm}>Save</Button>
+              <Button onClick={saveEditForm}>Save</Button>
               <Button outline color="danger" onClick={hideEditForm}>
                 Cancel
               </Button>

@@ -66,14 +66,15 @@ namespace Tabloid_Fullstack.Controllers
                 return BadRequest();
             }
 
-            var exisitingPost = _tagRepository.GetById(id);
+            var exisitingTag = _tagRepository.GetById(id);
 
-            if (exisitingPost == null)
+            if (exisitingTag == null)
             {
                 return NotFound();
             }
+            exisitingTag.Name = tag.Name;
 
-            _tagRepository.Update(tag);
+            _tagRepository.Update(exisitingTag);
             return NoContent();
         }
 
@@ -81,9 +82,9 @@ namespace Tabloid_Fullstack.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var post = _tagRepository.GetById(id);
+            var tag = _tagRepository.GetById(id);
 
-            if (post == null)
+            if (tag == null)
             {
                 return NotFound();
             }
