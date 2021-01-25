@@ -2,6 +2,7 @@
 // PostCreate renders Post Form
 import React, { useContext, useEffect, useState } from "react"
 import { UserProfileContext } from "../../providers/UserProfileProvider"
+import { toast } from "react-toastify";
 
 const PostCreate = ({ editablePost }) => {
     const { getToken } = useContext(UserProfileContext)
@@ -48,7 +49,12 @@ const PostCreate = ({ editablePost }) => {
                 },
                 body: JSON.stringify(submittedPost)
             })
-        ).then(setPost(emptyPostForResetting))
+        )
+        .then(() => {
+            toast.info(`Created ${post.title}!`)
+            setPost(emptyPostForResetting)
+        })
+
     }
 
     const handleControlledInputChange = e => {
@@ -58,11 +64,13 @@ const PostCreate = ({ editablePost }) => {
     }
 
     const constructNewPost = (e) => {
-        // Check to ensure category Id is not 0, if it is 0, show error toast message
+       if (post.categoryId === 0) {
+           toast.error("Error! Must select a Category!")
+           return
+       }
         
         if (post.imageLocation === undefined) {
-            const defaultImg = "http://lorempixel.com/920/360/"
-            post.imageLocation = defaultImg
+            post.imageLocation = "http://lorempixel.com/920/360/"
         }
 
         if (editablePost !== undefined) {
@@ -120,6 +128,7 @@ const PostCreate = ({ editablePost }) => {
                    id="postContent"
                    name="content"
                    value={post.content}
+                   maxLength="255"
                    placeholder="Add Post Content"
                    rows={3}
                    cols={40}
