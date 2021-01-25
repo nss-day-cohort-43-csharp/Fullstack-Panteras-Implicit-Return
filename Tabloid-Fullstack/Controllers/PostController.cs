@@ -49,7 +49,7 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("{postId}/{userId}")]
+        [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
