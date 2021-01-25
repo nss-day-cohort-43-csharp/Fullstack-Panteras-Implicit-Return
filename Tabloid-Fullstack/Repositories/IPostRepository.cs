@@ -7,9 +7,11 @@ namespace Tabloid_Fullstack.Repositories
     public interface IPostRepository
     {
         List<PostSummary> Get();
+        
+        //GetByUserId by Sam Edwards
+        List<PostSummary> GetByUserId(int userId);
         Post GetById(int id);
         List<ReactionCount> GetReactionCounts(int postId);
-
 
     }
 }

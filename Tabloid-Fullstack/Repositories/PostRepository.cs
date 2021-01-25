@@ -39,6 +39,26 @@ namespace Tabloid_Fullstack.Repositories
                 .ToList();
         }
 
+        //GetByUserId by Sam Edwards
+        public List<PostSummary> GetByUserId(int userId)
+        {
+            return _context.Post
+                .Include(p => p.Category)
+                .Where(p => p.UserProfileId == userId)
+                .Select(p => new PostSummary()
+                {
+                    Id = p.Id,
+                    ImageLocation = p.ImageLocation,
+                    Title = p.Title,
+                    AuthorId = p.UserProfileId,
+                    AuthorName = p.UserProfile.DisplayName,
+                    AbbreviatedText = p.Content.Substring(0, 200),
+                    PublishDateTime = p.PublishDateTime,
+                    Category = p.Category
+                })
+                .ToList();
+        }
+
         public Post GetById(int id)
         {
             return _context.Post

@@ -26,6 +26,7 @@ export function UserProfileProvider(props) {
       .then((signInResponse) => getUserProfile(signInResponse.user.uid))
       .then((userProfile) => {
         localStorage.setItem("userProfile", JSON.stringify(userProfile));
+        localStorage.setItem("userProfileId", userProfile.id);
         setIsLoggedIn(true);
         return userProfile;
       });
@@ -50,6 +51,7 @@ export function UserProfileProvider(props) {
       )
       .then((savedUserProfile) => {
         localStorage.setItem("userProfile", JSON.stringify(savedUserProfile));
+        localStorage.setItem("userProfileId", userProfile.id);
         setIsLoggedIn(true);
         return savedUserProfile;
       });

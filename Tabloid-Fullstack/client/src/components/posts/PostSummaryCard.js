@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card } from "reactstrap";
-import formatDate from "../utils/dateFormatter";
+import formatDate from "../../utils/dateFormatter";
 import "./PostSummaryCard.css";
 
 const PostSummaryCard = ({ post }) => {
