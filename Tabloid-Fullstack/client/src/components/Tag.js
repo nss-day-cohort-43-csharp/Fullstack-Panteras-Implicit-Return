@@ -13,7 +13,7 @@ import {
   ModalHeader,
 } from "reactstrap";
 
-const Tag = ({ tag, saveUpdatedTag }) => {
+const Tag = ({ tag, saveUpdatedTag, deleteTag }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [tagEdits, setTagEdits] = useState("");
@@ -25,13 +25,18 @@ const Tag = ({ tag, saveUpdatedTag }) => {
   const saveEditForm = () => {
     saveUpdatedTag(tagEdits, tag.id);
     setIsEditing(false);
-    // setTagEdits(tag.name);
   };
 
   const hideEditForm = () => {
     setIsEditing(false);
     setTagEdits("");
   };
+
+  const handleDelete = () => {
+    deleteTag(tag.id);
+    setPendingDelete(false);
+  };
+
 
   return (
     <div className="justify-content-between row">
@@ -69,7 +74,7 @@ const Tag = ({ tag, saveUpdatedTag }) => {
       )}
       {/* DELETE CONFIRM MODAL */}
       <Modal isOpen={pendingDelete}>
-        <ModalHeader>Delele {tag.name}?</ModalHeader>
+        <ModalHeader>Delete {tag.name}?</ModalHeader>
         <ModalBody>
           Are you sure you want to delete this tag? This action cannot be
           undone.
@@ -77,7 +82,7 @@ const Tag = ({ tag, saveUpdatedTag }) => {
         <ModalFooter>
           <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
           {/* need onclick event to fire off delete method */}
-          <Button className="btn btn-outline-danger">Yes, Delete</Button>
+          <Button onClick={handleDelete} className="btn btn-outline-danger">Yes, Delete</Button>
         </ModalFooter>
       </Modal>
     </div>

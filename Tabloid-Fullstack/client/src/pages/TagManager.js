@@ -67,6 +67,19 @@ const TagManager = () => {
     );
   };
 
+  const deleteTag = (id) => {
+    getToken().then((token) =>
+      fetch(`/api/tag/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(() => {
+        getTags();
+      })
+    );
+  };
+
   return (
     <div className="container mt-5">
       <img
@@ -81,7 +94,7 @@ const TagManager = () => {
           <ListGroup>
             {tags.map((tag) => (
               <ListGroupItem key={tag.id}>
-                <Tag tag={tag} saveUpdatedTag={saveUpdatedTag}/>
+                <Tag tag={tag} saveUpdatedTag={saveUpdatedTag} deleteTag={deleteTag} />
               </ListGroupItem>
             ))}
           </ListGroup>
