@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,19 @@ namespace Tabloid_Fullstack.Repositories
         public void Add(Tag tag)
         {
             _context.Add(tag);
+            _context.SaveChanges();
+        }
+
+        public void Update(Tag tag)
+        {
+            _context.Entry(tag).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var tag = GetById(id);
+            _context.Tag.Remove(tag);
             _context.SaveChanges();
         }
 
