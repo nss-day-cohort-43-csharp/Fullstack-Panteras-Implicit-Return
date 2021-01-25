@@ -76,5 +76,20 @@ namespace Tabloid_Fullstack.Controllers
             _tagRepository.Update(tag);
             return NoContent();
         }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var post = _tagRepository.GetById(id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            _tagRepository.Delete(id);
+            return NoContent();
+        }
     }
 }
