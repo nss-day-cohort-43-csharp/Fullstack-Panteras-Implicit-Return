@@ -71,5 +71,13 @@ namespace Tabloid_Fullstack.Controllers
             };
             return Ok(postDetails);
         }
+
+        //Add Post by Sam Edwards
+        [HttpPost]
+        public IActionResult Add(Post post)
+        {
+            _repo.Add(post);
+            return Ok(post);
+        }
     }
 }

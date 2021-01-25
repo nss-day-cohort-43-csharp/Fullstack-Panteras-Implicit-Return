@@ -78,5 +78,12 @@ namespace Tabloid_Fullstack.Repositories
                 })
                 .ToList();
         }
+
+        //Add by Sam Edwards
+        public void Add(Post post)
+        {
+            _context.Add(post);
+            _context.SaveChanges();
+        }
     }
 }

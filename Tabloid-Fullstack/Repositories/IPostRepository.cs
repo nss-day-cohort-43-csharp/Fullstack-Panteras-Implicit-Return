@@ -12,6 +12,7 @@ namespace Tabloid_Fullstack.Repositories
         List<PostSummary> GetByUserId(int userId);
         Post GetById(int id);
         List<ReactionCount> GetReactionCounts(int postId);
-
+        //Add by Sam Edwards
+        void Add(Post post);
     }
 }
