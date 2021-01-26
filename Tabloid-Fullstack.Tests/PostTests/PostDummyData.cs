@@ -62,9 +62,35 @@ namespace Tabloid_Fullstack.Tests.PostTests
                 UserTypeId = 2
             };
 
+            var user4 = new UserProfile()
+            {
+                FirebaseUserId = "FirebaseIdAdmin",
+                DisplayName = "Admin Big Jim",
+                FirstName = "Big",
+                LastName = "Jim",
+                Email = "jim@ween.com",
+                CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
+                ImageLocation = null,
+                UserTypeId = 1
+            };
+
+            var user5 = new UserProfile()
+            {
+                FirebaseUserId = "FirebaseIdOwner",
+                DisplayName = "Owner ",
+                FirstName = "Big",
+                LastName = "Jim",
+                Email = "jim@ween.com",
+                CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
+                ImageLocation = null,
+                UserTypeId = 2
+            };
+
             _context.Add(user1);
             _context.Add(user2);
             _context.Add(user3);
+            _context.Add(user4);
+            _context.Add(user5);
             _context.SaveChanges();
 
             var category1 = new Category()
