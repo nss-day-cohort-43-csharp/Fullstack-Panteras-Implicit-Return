@@ -26,6 +26,7 @@ const PostDetails = () => {
   const [comment, setComment] = useState();
   const { getToken, isAdmin } = useContext(UserProfileContext);
   const history = useHistory();
+  const userId = +localStorage.getItem("userProfileId");
 
   useEffect(() => {
     return getToken().then((token) =>
@@ -92,7 +93,7 @@ const PostDetails = () => {
 
           {/* IF I'm the ADMIN or OWNER, Show buttons */}
           {
-            !isAdmin() ? null : 
+            !isAdmin() && post.userProfileId !== userId ? null : 
               <ButtonGroup size="sm">
                 <Button className="btn btn-primary" onClick={e => console.log("EDIT")}>
                   Edit
