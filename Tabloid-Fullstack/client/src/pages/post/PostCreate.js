@@ -61,10 +61,6 @@ const PostCreate = ({ editablePost }) => {
            toast.error("Error! Must select a Category!")
            return
        }
-        
-        if (post.imageLocation === undefined) {
-            post.imageLocation = "http://lorempixel.com/920/360/"
-        }
 
         if (editablePost !== undefined) {
             // updatePost({
@@ -141,7 +137,7 @@ const PostCreate = ({ editablePost }) => {
                         ))}
                     </select>
                </fieldset>
-               {/* <fieldset>
+               <fieldset>
                    <label html="postHeader">(Optional) Header Image URL: </label>
                    <input
                    onChange={handleControlledInputChange}
@@ -150,7 +146,7 @@ const PostCreate = ({ editablePost }) => {
                    value={post.imageLocation}
                    placeholder="Add image URL"
                    />
-               </fieldset> */}
+               </fieldset>
                <fieldset>
                    <label htmlFor="PublishDateTime">(Optional) Publication Date</label>
                     <input

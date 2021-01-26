@@ -83,6 +83,11 @@ namespace Tabloid_Fullstack.Repositories
         public void Add(Post post)
         {
             post.CreateDateTime = DateTime.Now;
+            // If user did not enter a good URL, give them the default
+            if (!Uri.IsWellFormedUriString(post.ImageLocation, UriKind.Absolute))
+            {
+                post.ImageLocation = "http://lorempixel.com/920/360/";
+            }
             _context.Add(post);
             _context.SaveChanges();
         }
