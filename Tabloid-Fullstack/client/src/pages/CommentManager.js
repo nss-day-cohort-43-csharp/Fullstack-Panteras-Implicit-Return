@@ -22,7 +22,7 @@ const CommentManager = () => {
     const [content, setContent] = useState([]);
     const [newContent, setNewContent] = useState("");
 
-    const { postId } = useParams;
+    const { postId } = useParams();
 
     useEffect(() => {
         getComments();
@@ -45,6 +45,7 @@ const CommentManager = () => {
     };
 
     const saveNewComment = () => {
+        console.log(postId);
         const commentToAdd = {
             subject: newSubject,
             content: newContent,
