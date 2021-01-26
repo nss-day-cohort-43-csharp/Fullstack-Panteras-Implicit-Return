@@ -91,8 +91,6 @@ namespace Tabloid_Fullstack.Repositories
             }
             _context.Add(post);
             _context.SaveChanges();
-
-            int id = post.Id;
         }
     }
 }
