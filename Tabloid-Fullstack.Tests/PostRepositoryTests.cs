@@ -1,6 +1,7 @@
 // Repository Unit Tests by Sam Edwards
 using System;
 using Tabloid_Fullstack.Models;
+using Tabloid_Fullstack.Repositories;
 using Xunit;
 
 // We are able to do these tests because we "spoof" the ApplicationDbContext using Entity Framework and the EFTextFixture Class
@@ -14,45 +15,114 @@ namespace Tabloid_Fullstack.Tests
 
         public PostRepositoryTests()
         {
+            // When constructed, runs dummy data
             AddSampleData();
         }
+
+        [Fact]
+        public void User_Can_Add_Post()
+        {
+            // Create a new Post, leaving out the CreateDateTime because
+            // That gets created on Add
+            var post = new Post
+            {
+                Title = "Ween, a band, that's really good",
+                Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
+                ImageLocation = "http://foo.gif",
+                PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                IsApproved = true,
+                CategoryId = 2,
+                UserProfileId = 3
+            };
+
+            // Get our PostRepo
+            var repo = new PostRepository(_context);
+
+            // Get all of our Posts to check their length
+            var originalPostAmount = repo.Get().Count;
+
+            // Attempt to Add Post
+            repo.Add(post);
+
+            // Now 
+
+
+            //Assert.
+
+        }
+
 
         // Add sample data
         private void AddSampleData()
         {
+            var userType1 = new UserType()
+            {
+                Name = "admin"
+            };
+
+            var userType2 = new UserType()
+            {
+                Name = "owner"
+            };
+
+            _context.Add(userType1);
+            _context.Add(userType2);
+            _context.SaveChanges();
+
             var user1 = new UserProfile()
             {
+                FirebaseUserId = "TEST_FIREBASE_UID_1",
                 DisplayName = "Dean",
                 FirstName = "Michael",
                 LastName = "Melchiondo",
                 Email = "dean@ween.com",
                 CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
-                FirebaseUserId = "TEST_FIREBASE_UID_1"
+                ImageLocation = null,
+                UserTypeId =  1
             };
 
             var user2 = new UserProfile()
             {
+                FirebaseUserId = "TEST_FIREBASE_UID_2",
                 DisplayName = "Gene",
                 FirstName = "Aaron",
                 LastName = "Freeman",
                 Email = "gene@ween.com",
                 CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
-                FirebaseUserId = "TEST_FIREBASE_UID_2"
+                ImageLocation = null,
+                UserTypeId = 2
             };
 
             var user3 = new UserProfile()
             {
+                FirebaseUserId = "TEST_FIREBASE_UID_3",
                 DisplayName = "bestDrummer",
                 FirstName = "Claude",
                 LastName = "Coleman",
                 Email = "claude@ween.com",
                 CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
-                FirebaseUserId = "TEST_FIREBASE_UID_3"
+                ImageLocation = null,
+                UserTypeId = 2
             };
 
             _context.Add(user1);
             _context.Add(user2);
             _context.Add(user3);
+            _context.SaveChanges();
+
+            var category1 = new Category()
+            {
+                Name = "Best Ween Songs"
+            };
+
+            var category2 = new Category()
+            {
+                Name = "Most Underrated Ween Songs"
+            };
+
+            _context.Add(category1);
+            _context.Add(category2);
+            _context.SaveChanges();
 
             var post1 = new Post()
             {
@@ -86,7 +156,7 @@ namespace Tabloid_Fullstack.Tests
                 CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
                 PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
                 IsApproved = true,
-                CategoryId = 3,
+                CategoryId = 2,
                 UserProfileId = 3
             };
 
@@ -94,12 +164,6 @@ namespace Tabloid_Fullstack.Tests
             _context.Add(post2);
             _context.Add(post3);
             _context.SaveChanges();
-        }
-
-        [Fact]
-        public void Test1()
-        {
-
         }
     }
 }

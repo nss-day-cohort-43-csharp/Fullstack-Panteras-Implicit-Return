@@ -76,7 +76,6 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Add(Post post)
         {
-            post.CreateDateTime = DateTime.Now;
             _repo.Add(post);
             return Ok(post);
         }

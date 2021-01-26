@@ -82,6 +82,7 @@ namespace Tabloid_Fullstack.Repositories
         //Add by Sam Edwards
         public void Add(Post post)
         {
+            post.CreateDateTime = DateTime.Now;
             _context.Add(post);
             _context.SaveChanges();
         }
