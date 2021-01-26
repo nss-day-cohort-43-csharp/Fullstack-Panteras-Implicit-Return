@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 
 const PostForm = ({ editablePost }) => {
+
+    console.log("INCOMING", editablePost)
+
     const { getToken } = useContext(UserProfileContext)
     const [categories, setCategories] = useState([]);
     const [post, setPost] = useState("");
@@ -110,8 +113,8 @@ const PostForm = ({ editablePost }) => {
 
     // MAX LENGTH REQUIRED FOR TITLE AND CONTENT
     return (
-        <div className="container mt-5">
-            <h1>Create Post</h1>
+        <div className="container mt-5">   
+            <h1>{!editablePost ? "Create" : "Edit"} Post</h1>
             <form onSubmit={createPost}>
                 <fieldset>
                     <label htmlFor="postTitle">Title: </label>
