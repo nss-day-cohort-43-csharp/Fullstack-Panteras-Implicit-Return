@@ -23,16 +23,16 @@ const MyPosts = () => {
                         Authorization: `Bearer ${token}`
                     }
                 })
-                    .then(res => {
-                        if (res.status === 404) {
-                            toast.error("Couldn't get your posts")
-                            return
-                        }
-                        return res.json();
-                    })
-                    .then(data => {
-                        setMyPosts(data)
-                    })
+                .then(res => {
+                    if (res.status === 404) {
+                        toast.error("Couldn't get your posts")
+                        return
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    setMyPosts(data)
+                })
             
             )
         }

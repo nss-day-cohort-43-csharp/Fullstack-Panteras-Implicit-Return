@@ -78,5 +78,19 @@ namespace Tabloid_Fullstack.Repositories
                 })
                 .ToList();
         }
+
+        //Add by Sam Edwards
+        public void Add(Post post)
+        {
+            post.CreateDateTime = DateTime.Now;
+            
+            // If user did not enter a good URL, give them the default image
+            if (!Uri.IsWellFormedUriString(post.ImageLocation, UriKind.Absolute))
+            {
+                post.ImageLocation = "http://lorempixel.com/920/360/";
+            }
+            _context.Add(post);
+            _context.SaveChanges();
+        }
     }
 }
