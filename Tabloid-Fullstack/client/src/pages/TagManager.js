@@ -51,6 +51,34 @@ const TagManager = () => {
       })
     );
   };
+  const saveUpdatedTag = (tagToUpdate, id) => {
+    const updatedTag = { name: tagToUpdate, id: id };
+    getToken().then((token) =>
+      fetch(`/api/tag/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedTag),
+      }).then(() => {
+        getTags();
+      })
+    );
+  };
+
+  const deleteTag = (id) => {
+    getToken().then((token) =>
+      fetch(`/api/tag/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(() => {
+        getTags();
+      })
+    );
+  };
 
   return (
     <div className="container mt-5">
@@ -66,7 +94,7 @@ const TagManager = () => {
           <ListGroup>
             {tags.map((tag) => (
               <ListGroupItem key={tag.id}>
-                <Tag tag={tag} />
+                <Tag tag={tag} saveUpdatedTag={saveUpdatedTag} deleteTag={deleteTag} />
               </ListGroupItem>
             ))}
           </ListGroup>
