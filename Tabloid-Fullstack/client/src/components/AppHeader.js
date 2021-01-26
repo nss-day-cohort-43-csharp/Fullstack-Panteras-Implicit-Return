@@ -1,6 +1,6 @@
 // Additions by: Terra Roush, 
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -13,9 +13,11 @@ import {
   NavLink,
   NavbarText,
 } from "reactstrap";
+import { Image } from "semantic-ui-react";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 
 const AppHeader = () => {
+
   const { getCurrentUser, logout, isAdmin } = useContext(UserProfileContext);
   const user = getCurrentUser();
   const history = useHistory();
@@ -102,6 +104,7 @@ const AppHeader = () => {
           {user ? (
             <NavbarText className="d-sm-none d-md-block">
               Welcome {user.displayName}
+              <Image src={user.imageLocation}/>
             </NavbarText>
           ) : null}
         </Collapse>

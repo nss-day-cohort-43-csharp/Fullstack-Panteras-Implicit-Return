@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using Tabloid_Fullstack.Data;
 using Tabloid_Fullstack.Models;
-using Tabloid_Fullstack.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace Tabloid_Fullstack.Repositories
 {
@@ -38,6 +36,12 @@ namespace Tabloid_Fullstack.Repositories
         {
             _context.Add(userProfile);
             _context.SaveChanges();
+        }
+
+        public void AddImageProfile(string image, int id)
+        {
+            var user = GetByUserProfileId(id);
+            user.ImageLocation = image;
         }
 
 
