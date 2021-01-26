@@ -68,6 +68,11 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, Tag tag)
         {
+            var currentUserProfile = GetCurrentUserProfile();
+            if (currentUserProfile.UserTypeId != 1)
+            {
+                return NotFound();
+            }
             if (id != tag.Id)
             {
                 return BadRequest();
@@ -89,6 +94,11 @@ namespace Tabloid_Fullstack.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var currentUserProfile = GetCurrentUserProfile();
+            if (currentUserProfile.UserTypeId != 1)
+            {
+                return NotFound();
+            }
             var tag = _tagRepository.GetById(id);
 
             if (tag == null)
