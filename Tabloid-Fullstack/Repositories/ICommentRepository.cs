@@ -7,7 +7,7 @@ namespace Tabloid_Fullstack.Repositories
     {
         List<Comment> GetAllByPostId(int PostId);
         List<Comment> GetAll();
-        //void Add(Comment comment);
+        void Add(Comment comment);
         //void Update(Comment commnet);
         //void Delete(int id);
     }
