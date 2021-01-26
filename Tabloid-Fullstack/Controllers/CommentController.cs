@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
 
 namespace Tabloid_Fullstack.Controllers
@@ -15,9 +16,9 @@ namespace Tabloid_Fullstack.Controllers
         public readonly ICommentRepository _commentRepository;
 
         public CommentController(ICommentRepository commentRepository)
-            {
+        {
             _commentRepository = commentRepository;
-            }
+        }
 
         [HttpGet("{PostId}")]
         public IActionResult Get(int PostId)
@@ -30,8 +31,6 @@ namespace Tabloid_Fullstack.Controllers
         {
             return Ok(_commentRepository.GetAll());
         }
-
-
 
         // GET: CommentController
         public ActionResult Index()
@@ -46,9 +45,11 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         // GET: CommentController/Create
-        public ActionResult Create()
+        [HttpPost]
+        public ActionResult Add(Comment comment)
         {
-            return View();
+            _repo.Add(comment);
+            return Ok(comment);
         }
 
         // POST: CommentController/Create
