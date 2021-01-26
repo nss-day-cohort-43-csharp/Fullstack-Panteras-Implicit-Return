@@ -91,5 +91,38 @@ namespace Tabloid_Fullstack.Tests.PostTests
             // TotalPostCountAfterDeletion should be one less than totalPostCount
             Assert.True(totalPostCountAfterDeletion == totalPostCount - 1);
         }
+
+        [Fact]
+        public void No_Delete_For_NonOwner_NonAdmin()
+        {
+            // As a non-owner, non-admin, I should not be able to delete somone's post
+
+            // Get a postId that is mine
+            var postId = 1;
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdOwner"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the PostRepository and UserProfile Repository to create a PostController
+            var postRepo = new PostRepository(_context);
+            var userProfileRepo = new UserProfileRepository(_context);
+
+            // Get full count of posts
+            var totalPostCount = postRepo.Get().Count;
+
+            // Spoof the Post Controller
+            var controller = new PostController(postRepo, userProfileRepo);
+            controller.ControllerContext = new ControllerContext();
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+            controller.Delete(postId);
+
+            var totalPostCountAfterDeletion = postRepo.Get().Count;
+
+            // TotalPostCountAfterDeletion should be one less than totalPostCount
+            Assert.True(totalPostCountAfterDeletion == totalPostCount);
+        }
     }
 }
