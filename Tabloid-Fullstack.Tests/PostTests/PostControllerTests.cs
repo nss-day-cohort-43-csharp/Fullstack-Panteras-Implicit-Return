@@ -24,6 +24,11 @@ namespace Tabloid_Fullstack.Tests.PostTests
         [Fact]
         public void Delete_For_Only_Admin()
         {
+            // As an Admin, I should be able to delete any post, including those that aren't mine
+
+            // Get a postId that is not mine
+            var postId = 1;
+
             // Spoof an authenticated user by generating a ClaimsPrincipal
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                                         new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
@@ -33,6 +38,9 @@ namespace Tabloid_Fullstack.Tests.PostTests
             var postRepo = new PostRepository(_context);
             var userProfileRepo = new UserProfileRepository(_context);
 
+            // Get full count of posts
+            var totalPostCount = postRepo.Get().Count;
+
             // Spoof the Post Controller
             var controller = new PostController(postRepo, userProfileRepo);
             // Required to create the controller
@@ -40,8 +48,15 @@ namespace Tabloid_Fullstack.Tests.PostTests
             // Pretend the user is making a request to the controller
             controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-            var loggedInUser = ControllerUtils.GetCurrentUserProfile(userProfileRepo, user);
+            // Attempt to delete a as Admin and not the Post Owner
+            // I do not need to pass in the user
+            // it's already in the fake HttpContext in the ControllerContext
+            controller.Delete(postId);
 
+            var totalPostCountAfterDeletion = postRepo.Get().Count;
+
+            // TotalPostCountAfterDeletion should be one less than totalPostCount
+            Assert.True(totalPostCountAfterDeletion == totalPostCount - 1);
         }
     }
 }
