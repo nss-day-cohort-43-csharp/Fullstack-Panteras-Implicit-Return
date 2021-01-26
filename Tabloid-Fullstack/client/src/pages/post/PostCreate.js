@@ -10,15 +10,6 @@ const PostCreate = ({ editablePost }) => {
     const [post, setPost] = useState("");
 
     const userId = +localStorage.getItem("userProfileId");
-
-    const emptyPostForResetting = {
-        title: "",
-        content: "",
-        categoryId: 0,
-        imageLocation: "",
-        imageLocation: "",
-        publishDateTime: ""
-    }
   
     useEffect(() => {
       getCategories();
@@ -50,11 +41,13 @@ const PostCreate = ({ editablePost }) => {
                 body: JSON.stringify(submittedPost)
             })
         )
-        .then(() => {
-            toast.info(`Created ${post.title}!`)
-            setPost(emptyPostForResetting)
+        .then(res => {
+            if (res.status === 200) {
+                toast.info(`Created ${post.title}!`)
+            } else {
+                toast.error(`Error! Unable to submit post!`)
+            }
         })
-
     }
 
     const handleControlledInputChange = e => {
@@ -64,7 +57,7 @@ const PostCreate = ({ editablePost }) => {
     }
 
     const constructNewPost = (e) => {
-       if (post.categoryId === 0) {
+       if (!post.categoryId) {
            toast.error("Error! Must select a Category!")
            return
        }
@@ -148,7 +141,7 @@ const PostCreate = ({ editablePost }) => {
                         ))}
                     </select>
                </fieldset>
-               <fieldset>
+               {/* <fieldset>
                    <label html="postHeader">(Optional) Header Image URL: </label>
                    <input
                    onChange={handleControlledInputChange}
@@ -157,7 +150,7 @@ const PostCreate = ({ editablePost }) => {
                    value={post.imageLocation}
                    placeholder="Add image URL"
                    />
-               </fieldset>
+               </fieldset> */}
                <fieldset>
                    <label htmlFor="PublishDateTime">(Optional) Publication Date</label>
                     <input
