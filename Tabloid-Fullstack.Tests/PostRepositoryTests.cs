@@ -26,7 +26,7 @@ namespace Tabloid_Fullstack.Tests
             // That gets created on Add
             var post = new Post
             {
-                Title = "Ween, a band, that's really good",
+                Title = 32,
                 Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
                 ImageLocation = "http://foo.gif",
                 PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
@@ -38,17 +38,17 @@ namespace Tabloid_Fullstack.Tests
             // Get our PostRepo
             var repo = new PostRepository(_context);
 
-            // Get all of our Posts to check their length
+            // Get count of all posts
             var originalPostAmount = repo.Get().Count;
 
             // Attempt to Add Post
             repo.Add(post);
 
-            // Now 
+            // Get post count after addition
+            var afterPostAddAmount = repo.Get().Count;
 
-
-            //Assert.
-
+            // We should have more posts than before
+            Assert.True(afterPostAddAmount > originalPostAmount);
         }
 
 
