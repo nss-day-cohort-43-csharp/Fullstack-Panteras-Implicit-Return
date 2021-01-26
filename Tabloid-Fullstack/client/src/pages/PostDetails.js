@@ -1,4 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  Input,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "reactstrap";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container, Jumbotron } from "reactstrap";
@@ -13,7 +24,7 @@ const PostDetails = () => {
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
   const [comment, setComment] = useState();
-  const { getToken } = useContext(UserProfileContext);
+  const { getToken, isAdmin } = useContext(UserProfileContext);
   const history = useHistory();
 
   useEffect(() => {
@@ -78,6 +89,23 @@ const PostDetails = () => {
           <div className="col">
             <p>{formatDate(post.publishDateTime)}</p>
           </div>
+
+          {/* IF I'm the ADMIN or OWNER, Show buttons */}
+          {
+            !isAdmin() ? null : 
+              <ButtonGroup size="sm">
+                <Button className="btn btn-primary" onClick={e => console.log("EDIT")}>
+                  Edit
+                </Button>
+                <Button
+                  className="btn btn-danger"
+                  onClick={e => console.log("DELETE")}
+                >
+                  Delete
+                </Button>
+              </ButtonGroup>
+          }
+
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         <div className="my-4">
@@ -90,11 +118,8 @@ const PostDetails = () => {
         <Container>
           {comment.map((c) => {
             return <div key={c.id}><CommentSummaryCard comment={c} /></div>
-          })
-          }
-
+          })}
         </Container>
-
       </div>
     </div>
 
