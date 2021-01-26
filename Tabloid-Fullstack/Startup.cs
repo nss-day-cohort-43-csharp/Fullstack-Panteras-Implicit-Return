@@ -34,7 +34,7 @@ namespace Tabloid_Fullstack
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<ICommentRepository, CommentRepository>();
 
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//Authored by Terra Roush
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,11 @@ namespace Tabloid_Fullstack.Controllers
      
         private ITagRepository _tagRepository;
         private IUserProfileRepository _userProfileRepository;
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
+        }
 
         public TagController(ITagRepository tagRepository, IUserProfileRepository userProfileRepository)
         {
@@ -49,8 +56,8 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Add(Tag tag)
         {
-            var storedUser = ControllerUtils.GetCurrentUserProfile(_userProfileRepository, User);
-            if (storedUser.UserTypeId != 1)
+            var currentUserProfile = GetCurrentUserProfile();
+            if (currentUserProfile.UserTypeId != 1)
             {
                 return NotFound();
             }
