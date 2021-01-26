@@ -81,7 +81,7 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         //Delete by Sam Edwards
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             // Get current user

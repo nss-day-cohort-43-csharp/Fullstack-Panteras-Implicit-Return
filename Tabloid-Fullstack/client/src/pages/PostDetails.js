@@ -129,7 +129,6 @@ const PostDetails = () => {
       </div>
     </div>
 
-
     <Modal isOpen={pendingDelete}>
       <ModalHeader>Delete {post.name}?</ModalHeader>
       <ModalBody>
@@ -140,8 +139,21 @@ const PostDetails = () => {
         <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
         {/* need onclick event to fire off delete method */}
         <Button onClick={e => {
-          // Send delete request
-          setPendingDelete(false);
+          getToken().then(token => 
+            fetch(`/api/post/${post.id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }).then(res => {
+              console.log(res)
+              if (res.status === 204) {
+                toast.info("Post deleted!")
+                history.push("/explore")
+              } else {
+                toast.error("Error! Unable to delete post!")
+              }
+            }))
         }}
         className="btn btn-outline-danger">Yes, Delete</Button>
       </ModalFooter>
