@@ -3,12 +3,13 @@
 import React, { useContext, useEffect, useState } from "react"
 import { UserProfileContext } from "../../providers/UserProfileProvider"
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const PostCreate = ({ editablePost }) => {
     const { getToken } = useContext(UserProfileContext)
     const [categories, setCategories] = useState([]);
     const [post, setPost] = useState("");
-
+    const history = useHistory();
     const userId = +localStorage.getItem("userProfileId");
   
     useEffect(() => {
@@ -42,10 +43,21 @@ const PostCreate = ({ editablePost }) => {
             })
         )
         .then(res => {
+            // Check the response status before converting to JSON, and display toast notifications
             if (res.status === 200) {
                 toast.info(`Created ${post.title}!`)
+                return res.json();
             } else {
                 toast.error(`Error! Unable to submit post!`)
+                return
+            }
+        })
+        .then(post => {
+            // Depending on if we have a response, push to the new post
+            if (!post) {
+                return
+            } else {
+                history.push(`/post/${post.id}`)
             }
         })
     }
