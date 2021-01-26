@@ -21,10 +21,14 @@ import "./PostDetails.css";
 
 const PostDetails = () => {
   const { postId } = useParams();
+
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
   const [comment, setComment] = useState();
+  const [pendingDelete, setPendingDelete] = useState(false);
+
   const { getToken, isAdmin } = useContext(UserProfileContext);
+
   const history = useHistory();
   const userId = +localStorage.getItem("userProfileId");
 
@@ -70,6 +74,7 @@ const PostDetails = () => {
   if (!comment) return null;
 
   return (
+    <>
     <div>
       <Jumbotron
         className="post-details__jumbo"
@@ -91,8 +96,8 @@ const PostDetails = () => {
             <p>{formatDate(post.publishDateTime)}</p>
           </div>
 
-          {/* IF I'm the ADMIN or OWNER, Show buttons */}
           {
+            // If I'm an Admin or it's my post, show me edit/delete options
             !isAdmin() && post.userProfileId !== userId ? null : 
               <ButtonGroup size="sm">
                 <Button className="btn btn-primary" onClick={e => console.log("EDIT")}>
@@ -100,7 +105,7 @@ const PostDetails = () => {
                 </Button>
                 <Button
                   className="btn btn-danger"
-                  onClick={e => console.log("DELETE")}
+                  onClick={e => setPendingDelete(true)}
                 >
                   Delete
                 </Button>
@@ -124,6 +129,24 @@ const PostDetails = () => {
       </div>
     </div>
 
+
+    <Modal isOpen={pendingDelete}>
+      <ModalHeader>Delete {post.name}?</ModalHeader>
+      <ModalBody>
+        Are you sure you want to delete this post? This action cannot be
+        undone.
+      </ModalBody>
+      <ModalFooter>
+        <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
+        {/* need onclick event to fire off delete method */}
+        <Button onClick={e => {
+          // Send delete request
+          setPendingDelete(false);
+        }}
+        className="btn btn-outline-danger">Yes, Delete</Button>
+      </ModalFooter>
+    </Modal>
+    </>
   );
 };
 
