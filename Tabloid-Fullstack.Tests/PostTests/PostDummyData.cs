@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Dummy Post data by Sam Edwards
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
 
+// Next time I write tests, keep the data unique to each Controller and Repo
 namespace Tabloid_Fullstack.Tests.PostTests
 {
     public class PostDummyData

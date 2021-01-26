@@ -1,4 +1,5 @@
 // Repository Unit Tests by Sam Edwards
+using Microsoft.AspNetCore.Mvc;
 using System;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
@@ -121,6 +122,14 @@ namespace Tabloid_Fullstack.Tests.PostTests
 
             // The post we just added should have the default URL string.
             Assert.True(justAddedPost.ImageLocation == "http://lorempixel.com/920/360/");
-        }    
+        }
+
+        [Fact]
+        public void User_Can_Delete_Post()
+        {
+
+        }
+
+
     }
 }

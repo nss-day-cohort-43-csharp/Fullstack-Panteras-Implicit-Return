@@ -4,10 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Tabloid_Fullstack.Controllers;
-using Tabloid_Fullstack.Controllers.Utils;
 using Tabloid_Fullstack.Repositories;
 using Xunit;
 
@@ -130,7 +127,7 @@ namespace Tabloid_Fullstack.Tests.PostTests
         {
             // If I try to delete a non-existent Post, even as an Admin, return NotFound
 
-            // Get a postId that is mine
+            // Get a postId that is non-existent
             var postId = 99999999;
 
             // Spoof an authenticated user by generating a ClaimsPrincipal
@@ -152,6 +149,5 @@ namespace Tabloid_Fullstack.Tests.PostTests
             // TotalPostCountAfterDeletion should be one less than totalPostCount
             Assert.True(response.StatusCode == 404);
         }
-
     }
 }

@@ -94,9 +94,8 @@ namespace Tabloid_Fullstack.Repositories
         }
 
         //Delete by Sam Edwards
-        public void Delete(int id)
+        public void Delete(Post post)
         {
-            var post = GetById(id);
             _context.Post.Remove(post);
             _context.SaveChanges();
         }
