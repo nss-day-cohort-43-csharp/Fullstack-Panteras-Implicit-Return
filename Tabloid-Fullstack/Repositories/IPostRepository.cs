@@ -14,5 +14,7 @@ namespace Tabloid_Fullstack.Repositories
         List<ReactionCount> GetReactionCounts(int postId);
         //Add by Sam Edwards
         void Add(Post post);
+        //Delete by Sam Edwards
+        void Delete(int id);
     }
 }

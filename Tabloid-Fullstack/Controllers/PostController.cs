@@ -73,11 +73,20 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         //Add Post by Sam Edwards
+        // I made these controllers as 'dumb' as possible, so my Repo Unit tests could do all the heavy lifting
         [HttpPost]
         public IActionResult Add(Post post)
         {
             _repo.Add(post);
             return Ok(post);
+        }
+
+        //Delete by Sam Edwards
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            // get current user, and pass into delete repo method for handling the check.
+            return NoContent();
         }
     }
 }
