@@ -96,10 +96,7 @@ namespace Tabloid_Fullstack.Repositories
         //Delete by Sam Edwards
         public void Delete(int id)
         {
-            // Get post by Id
-            // Check if incoming user is an admin OR post's author, 
-                // if true delete post
-                // if false, return NotFound()
+
         }
     }
 }

@@ -73,7 +73,6 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         //Add Post by Sam Edwards
-        // I made these controllers as 'dumb' as possible, so my Repo Unit tests could do all the heavy lifting
         [HttpPost]
         public IActionResult Add(Post post)
         {
@@ -85,7 +84,21 @@ namespace Tabloid_Fullstack.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            // get current user, and pass into delete repo method for handling the check.
+            // For the unit tests for controllers, I need to SPOOF a firebaseUser, create a new instance of the controller
+            // And run the methods from there.
+
+            // Get current user
+            var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
+            // Get post by Id
+            var postToDelete = _repo.GetById(id);
+            // Get post's author
+            var postAuthor = postToDelete.UserProfileId;
+            // Check if incoming user is NOT an admin OR post's author,
+            if (firebaseUser.UserTypeId != 1 && firebaseUser.Id != postAuthor)
+            {
+                return NotFound();
+            }
+            _repo.Delete(id);
             return NoContent();
         }
     }
