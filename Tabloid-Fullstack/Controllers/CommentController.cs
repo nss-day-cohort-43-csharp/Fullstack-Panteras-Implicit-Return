@@ -37,6 +37,7 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Add(Comment comment)
         {
+            comment.CreateDateTime = DateTime.Now;
             _commentRepository.Add(comment);
             return Ok(comment);
         }
