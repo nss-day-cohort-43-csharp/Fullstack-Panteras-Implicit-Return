@@ -20,13 +20,27 @@ namespace Tabloid_Fullstack.Tests
         }
 
         [Fact]
+        public void User_Can_Get_List_Of_Their_Posts()
+        {
+            var userId = 1;
+            var repo = new PostRepository(_context);
+
+            // Attempt to get list of user's posts
+            var usersPosts = repo.GetByUserId(userId);
+
+            // We should have 2 posts, with the AuthorId's matching userId
+            Assert.True(usersPosts.Count == 2);
+            Assert.True(usersPosts[0].AuthorId == userId);
+            Assert.True(usersPosts[1].AuthorId == userId);
+        }
+
+        [Fact]
         public void User_Can_Add_Post()
         {
-            // Create a new Post, leaving out the CreateDateTime because
-            // That gets created on Add
+            // Create a new Post, leaving out the CreateDateTime because that gets created on Add
             var post = new Post
             {
-                Title = 32,
+                Title = "Ween, a band, that's really good",
                 Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
                 ImageLocation = "http://foo.gif",
                 PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
@@ -145,7 +159,7 @@ namespace Tabloid_Fullstack.Tests
                 PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
                 IsApproved = true,
                 CategoryId = 2,
-                UserProfileId = 2
+                UserProfileId = 1
             };
 
             var post3 = new Post()
