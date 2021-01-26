@@ -9,11 +9,12 @@ const PostCreate = ({ editablePost }) => {
     const { getToken } = useContext(UserProfileContext)
     const [categories, setCategories] = useState([]);
     const [post, setPost] = useState("");
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
     const userId = +localStorage.getItem("userProfileId");
   
     useEffect(() => {
-      getCategories();
+      getCategories()
     }, []);
   
     const getCategories = () => {
@@ -26,7 +27,8 @@ const PostCreate = ({ editablePost }) => {
         })
           .then((res) => res.json())
           .then((categories) => {
-            setCategories(categories);
+            setCategories(categories)
+            setLoading(false)
           })
       );
     };
@@ -169,7 +171,7 @@ const PostCreate = ({ editablePost }) => {
                     value={post.publishDateTime}
                     placeholder=""></input>
                </fieldset>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={loading}>Submit</button>
             </form>
         </div>
     )
