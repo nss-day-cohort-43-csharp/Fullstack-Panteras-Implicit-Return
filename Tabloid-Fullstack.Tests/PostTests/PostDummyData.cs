@@ -149,6 +149,28 @@ namespace Tabloid_Fullstack.Tests.PostTests
             _context.Add(post2);
             _context.Add(post3);
             _context.SaveChanges();
+
+            var comment1 = new Comment
+            {
+                PostId = 3,
+                UserProfileId = 3,
+                Subject = "Ween sucks",
+                Content = "Really. No one should listen to them.",
+                CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
+            };
+
+            var comment2 = new Comment
+            {
+                PostId = 3,
+                UserProfileId = 3,
+                Subject = "Ween rocks",
+                Content = "So dope.",
+                CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
+            };
+
+            _context.Add(comment1);
+            _context.Add(comment2);
+            _context.SaveChanges();
         }
     }
 }
