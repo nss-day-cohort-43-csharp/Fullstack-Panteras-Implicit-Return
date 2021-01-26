@@ -97,7 +97,7 @@ namespace Tabloid_Fullstack.Tests
         [Fact]
         public void User_Entered_Invalid_ImageLocation()
         {
-            // Create a new Post with a good ImageLocation
+            // Create a new Post with a bad ImageLocation
             var post = new Post
             {
                 Title = "Ween, a band, that's really good",
