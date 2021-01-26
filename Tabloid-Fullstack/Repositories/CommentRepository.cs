@@ -10,7 +10,7 @@ namespace Tabloid_Fullstack.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        private readonly ApplicationDbContext _context;
+        private ApplicationDbContext _context;
 
         public CommentRepository(ApplicationDbContext context)
         {
