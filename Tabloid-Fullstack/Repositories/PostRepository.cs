@@ -96,6 +96,8 @@ namespace Tabloid_Fullstack.Repositories
         //Delete by Sam Edwards
         public void Delete(Post post)
         {
+            // Unable to do Unit Test because no Add Comment Method in Comment Repo
+            // Need a way to get all Comments for entered Post, then delete them first.
             _context.Post.Remove(post);
             _context.SaveChanges();
         }

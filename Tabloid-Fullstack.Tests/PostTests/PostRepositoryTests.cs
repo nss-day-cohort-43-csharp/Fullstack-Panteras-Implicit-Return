@@ -125,7 +125,7 @@ namespace Tabloid_Fullstack.Tests.PostTests
         }
 
         [Fact]
-        public void User_Can_Delete_Post()
+        public void User_Can_Delete_Post_Without_Comments()
         {
             // Create a new Post to delete
             var post = new Post
@@ -158,6 +158,53 @@ namespace Tabloid_Fullstack.Tests.PostTests
             Assert.True(postTotalAfterDeletion == postTotal - 1);
         }
 
+        [Fact]
+        public void User_Can_Delete_Post_With_Comments()
+        {
+            // Create a new Post to delete
+            var post = new Post
+            {
+                Title = "Ween, a band, that's really good",
+                Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
+                ImageLocation = "Ween is like---totally---cool",
+                PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                IsApproved = true,
+                CategoryId = 2,
+                UserProfileId = 3
+            };
+
+            // Create a Comment to add to that post
+            var comment = new Comment
+            {
+                PostId = 1,
+                UserProfileId = 3,
+                Subject = "Ween sucks",
+                Content = "Really. No one should listen to them.",
+                CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
+            };
+
+            // Get our PostRepo & CommentRepo
+            var postRepo = new PostRepository(_context);
+            var commentRepo = new CommentRepository(_context);
+
+            // Add that Post & Comment to Db
+            //postRepo.Add(post);
+            // ***CURRENTLY WE DO NOT HAVE AN ADD COMMENT METHOD
+            // UNABLE TO FINISH UNIT TEST***
+            //commentRepo.Add(comment);
+
+            // Get a count of all posts
+            var postTotal = postRepo.Get().Count;
+
+            // Delete just added post
+            postRepo.Delete(post);
+
+            // Get a new count of all posts;
+            var postTotalAfterDeletion = postRepo.Get().Count;
+
+            // Post total after deletion should be one less than original total
+            Assert.True(postTotalAfterDeletion == postTotal - 1);
+        }
 
     }
 }
