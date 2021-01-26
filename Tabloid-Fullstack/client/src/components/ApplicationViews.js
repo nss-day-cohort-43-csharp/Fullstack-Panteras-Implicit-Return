@@ -1,11 +1,11 @@
 // Additions by: Terra Roush, 
-
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import Explore from "../pages/Explore";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import PostCreate from "../pages/post/PostCreate"
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import MyPosts from "../pages/MyPosts";
@@ -22,6 +22,9 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/explore">
         {isLoggedIn ? <Explore /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/post/create">
+        {isLoggedIn ? <PostCreate /> : <Redirect to="/login" />}
       </Route>
       <Route path="/my-posts">
         {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}

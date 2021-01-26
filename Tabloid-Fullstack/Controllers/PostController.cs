@@ -49,7 +49,7 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("{postId}/{userId}")]
+        [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
@@ -70,6 +70,14 @@ namespace Tabloid_Fullstack.Controllers
                 ReactionCounts = reactionCounts
             };
             return Ok(postDetails);
+        }
+
+        //Add Post by Sam Edwards
+        [HttpPost]
+        public IActionResult Add(Post post)
+        {
+            _repo.Add(post);
+            return Ok(post);
         }
     }
 }

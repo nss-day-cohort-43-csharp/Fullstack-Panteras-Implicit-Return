@@ -29,13 +29,6 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var currentUser = GetCurrentUserProfile();
-
-            if (currentUser.UserTypeId != UserType.ADMIN_ID)
-            {
-                return Unauthorized();
-            }
-
             var categories = _categoryRepo.Get();
             return Ok(categories);
         }
