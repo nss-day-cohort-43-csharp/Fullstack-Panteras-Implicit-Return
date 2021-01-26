@@ -7,7 +7,7 @@ namespace Tabloid_Fullstack.Repositories
     {
         void Add(PostTag postTag);
         void Delete(int id);
-        List<PostTag> Get();
+        List<PostTag> GetAll();
         PostTag GetById(int id);
     }
 }

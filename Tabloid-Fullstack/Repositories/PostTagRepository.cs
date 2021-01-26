@@ -15,7 +15,7 @@ namespace Tabloid_Fullstack.Repositories
             _context = context;
         }
 
-        public List<PostTag> Get()
+        public List<PostTag> GetAll()
         {
             return _context.PostTag.ToList();
         }
