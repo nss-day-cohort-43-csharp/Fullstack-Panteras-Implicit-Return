@@ -2,9 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import {
   Button,
   ButtonGroup,
-  Form,
-  Input,
-  InputGroup,
   Modal,
   ModalBody,
   ModalFooter,
@@ -132,8 +129,7 @@ const PostDetails = () => {
     <Modal isOpen={pendingDelete}>
       <ModalHeader>Delete {post.name}?</ModalHeader>
       <ModalBody>
-        Are you sure you want to delete this post? This action cannot be
-        undone.
+        Are you sure you want to delete this post? This action cannot be undone.
       </ModalBody>
       <ModalFooter>
         <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
@@ -146,7 +142,6 @@ const PostDetails = () => {
                 Authorization: `Bearer ${token}`,
               },
             }).then(res => {
-              console.log(res)
               if (res.status === 204) {
                 toast.info("Post deleted!")
                 history.push("/explore")
