@@ -21,7 +21,44 @@ namespace Tabloid_Fullstack.Tests.PostTests
         [Fact]
         public void Update_For_Only_Admin()
         {
-            // As an Admin, I should be able to update any posts, including those that aren't mine
+            // *** CURRENTLY NOT WORKING BECAUSE IT APPEARS THAT, BECAUSE THE ID FOR THE RETURNED POST IS THE SAME
+            // AS THE ORIGINAL POST OBJECT, C# DOESN'T KNOW WHICH IS WHICH. ALTHOUGH PUT FAILS, IT SAYS IT WORKS *****
+            // As an Admin, I should be able to update any posts, including those that aren't mine.
+            // Get a postId that is not mine
+            var postId = 1;
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdOwner"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the PostRepository and UserProfile Repository to create a PostController
+            var postRepo = new PostRepository(_context);
+            var userProfileRepo = new UserProfileRepository(_context);
+
+            // Get the current post by Id
+            var post = postRepo.GetById(postId);
+
+            // Update Post's title
+            var newTitle = "How do you Like this new title?";
+            post.Title = newTitle;
+
+            // Spoof the Post Controller
+            var controller = new PostController(postRepo, userProfileRepo);
+            // Required to create the controller
+            controller.ControllerContext = new ControllerContext();
+            // Pretend the user is making a request to the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+            // Attempt to Update post
+            controller.Put(postId, post);
+
+            // Retrieve the updated post
+            var updatedPost = postRepo.GetById(postId);
+
+            // Post should be updated
+            Assert.True(updatedPost.Title == newTitle);
+
         }
 
         [Fact]

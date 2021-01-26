@@ -180,6 +180,7 @@ const PostForm = ({ editablePost }) => {
                     placeholder=""></input>
                </fieldset>
                 <button type="submit" disabled={loading}>Submit</button>
+                {/* ADD A CANCEL BUTTON IF WE'RE EDITING, AND RETURN TO THE POSTS DETAILS */}
             </form>
         </div>
     )
