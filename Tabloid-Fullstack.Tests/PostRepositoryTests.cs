@@ -94,6 +94,35 @@ namespace Tabloid_Fullstack.Tests
             Assert.True(justAddedPost.ImageLocation == post.ImageLocation);
         }
 
+        [Fact]
+        public void User_Entered_Invalid_ImageLocation()
+        {
+            // Create a new Post with a good ImageLocation
+            var post = new Post
+            {
+                Title = "Ween, a band, that's really good",
+                Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
+                ImageLocation = "Ween is like---totally---cool",
+                PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                IsApproved = true,
+                CategoryId = 2,
+                UserProfileId = 3
+            };
+
+            // Get our PostRepo
+            var repo = new PostRepository(_context);
+
+            // Add Post
+            repo.Add(post);
+
+            // Get all our posts, then the last post
+            var posts = repo.Get();
+            var justAddedPost = posts[0];
+
+            // The post we just added should have the default URL string.
+            Assert.True(justAddedPost.ImageLocation == "http://lorempixel.com/920/360/");
+        }
+
 
         // Dummy data
         private void AddSampleData()
