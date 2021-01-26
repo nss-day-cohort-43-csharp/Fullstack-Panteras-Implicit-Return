@@ -127,7 +127,35 @@ namespace Tabloid_Fullstack.Tests.PostTests
         [Fact]
         public void User_Can_Delete_Post()
         {
+            // Create a new Post to delete
+            var post = new Post
+            {
+                Title = "Ween, a band, that's really good",
+                Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
+                ImageLocation = "Ween is like---totally---cool",
+                PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                IsApproved = true,
+                CategoryId = 2,
+                UserProfileId = 3
+            };
 
+            // Get our PostRepo
+            var repo = new PostRepository(_context);
+
+            // Add that Post to Db
+            repo.Add(post);
+
+            // Get a count of all posts
+            var postTotal = repo.Get().Count;
+
+            // Delete just added post
+            repo.Delete(post);
+
+            // Get a new count of all posts;
+            var postTotalAfterDeletion = repo.Get().Count;
+
+            // Post total after deletion should be one less than original total
+            Assert.True(postTotalAfterDeletion == postTotal - 1);
         }
 
 
