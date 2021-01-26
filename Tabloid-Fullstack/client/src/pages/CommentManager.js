@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import {
     ListGroup,
     ListGroupItem,
@@ -9,17 +10,26 @@ import {
 import Comment from "../components/Comment";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 
+
 const CommentManager = () => {
     const { getToken } = useContext(UserProfileContext);
-    const [categories, setCategories] = useState([]);
+    const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
 
+    const [subject, setSubject] = useState([]);
+    const [newSubject, setNewSubject] = useState("");
+
+    const [content, setContent] = useState([]);
+    const [newContent, setNewContent] = useState("");
+
+    const { postId } = useParams;
+
     useEffect(() => {
-        getCategories();
+        getComments();
 
     }, []);
 
-    const getCategories = () => {
+    const getComments = () => {
         getToken().then((token) =>
             fetch(`/api/comment`, {
                 method: "GET",
@@ -28,14 +38,20 @@ const CommentManager = () => {
                 },
             })
                 .then((res) => res.json())
-                .then((categories) => {
-                    setCategories(categories);
+                .then((comments) => {
+                    setComments(comments);
                 })
         );
     };
 
     const saveNewComment = () => {
-        const commentToAdd = { name: newComment };
+        const commentToAdd = {
+            subject: newSubject,
+            content: newContent,
+            postId: postId
+
+
+        };
         getToken().then((token) =>
             fetch("/api/comment", {
                 method: "POST",
@@ -46,7 +62,7 @@ const CommentManager = () => {
                 body: JSON.stringify(commentToAdd),
             }).then(() => {
                 setNewComment("");
-                getCategories();
+                getComments();
             })
         );
     };
@@ -63,7 +79,7 @@ const CommentManager = () => {
             <div className="row justify-content-center">
                 <div className="col-xs-12 col-sm-8 col-md-6">
                     <ListGroup>
-                        {categories.map((comment) => (
+                        {comments.map((comment) => (
                             <ListGroupItem key={comment.id}>
                                 <Comment comment={comment} />
                             </ListGroupItem>
@@ -72,9 +88,14 @@ const CommentManager = () => {
                     <div className="my-4">
                         <InputGroup>
                             <Input
-                                onChange={(e) => setNewComment(e.target.value)}
-                                value={newComment}
-                                placeholder="Add a new comment"
+                                onChange={(e) => setNewSubject(e.target.value)}
+                                value={newSubject}
+                                placeholder="Add a new subject"
+                            />
+                            <Input
+                                onChange={(e) => setNewContent(e.target.value)}
+                                value={newContent}
+                                placeholder="Add a new content"
                             />
                             <Button onClick={saveNewComment}>Save</Button>
                         </InputGroup>

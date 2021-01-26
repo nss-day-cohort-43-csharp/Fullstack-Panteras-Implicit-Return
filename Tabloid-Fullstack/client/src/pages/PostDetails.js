@@ -7,6 +7,7 @@ import PostReactions from "../components/posts/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import "./PostDetails.css";
+import CommentManager from "./CommentManager";
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -88,10 +89,12 @@ const PostDetails = () => {
       <div>
         <h4>Comments</h4>
         <Container>
-          {comment.map((c) => {
+          {/* {comment.map((c) => {
             return <div key={c.id}><CommentCard comment={c} /></div>
           })
-          }
+          } */}
+
+          <CommentManager />
 
         </Container>
 
