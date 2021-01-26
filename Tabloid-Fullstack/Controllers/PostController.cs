@@ -84,13 +84,17 @@ namespace Tabloid_Fullstack.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            // For the unit tests for controllers, I need to SPOOF a firebaseUser, create a new instance of the controller
-            // And run the methods from there.
-
             // Get current user
             var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
             // Get post by Id
             var postToDelete = _repo.GetById(id);
+
+            // Ensure we have a post
+            if (postToDelete == null)
+            {
+                return NotFound();
+            }
+
             // Get post's author
             var postAuthor = postToDelete.UserProfileId;
             // Check if incoming user is NOT an admin OR post's author,

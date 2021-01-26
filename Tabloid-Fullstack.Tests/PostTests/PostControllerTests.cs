@@ -124,5 +124,34 @@ namespace Tabloid_Fullstack.Tests.PostTests
             // TotalPostCountAfterDeletion should be one less than totalPostCount
             Assert.True(totalPostCountAfterDeletion == totalPostCount);
         }
+
+        [Fact]
+        public void Return_NotFound_For_No_Post_With_That_Id()
+        {
+            // If I try to delete a non-existent Post, even as an Admin, return NotFound
+
+            // Get a postId that is mine
+            var postId = 99999999;
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the PostRepository and UserProfile Repository to create a PostController
+            var postRepo = new PostRepository(_context);
+            var userProfileRepo = new UserProfileRepository(_context);
+
+            // Spoof the Post Controller
+            var controller = new PostController(postRepo, userProfileRepo);
+            controller.ControllerContext = new ControllerContext();
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+            StatusCodeResult response = (StatusCodeResult)controller.Delete(postId);
+
+            // TotalPostCountAfterDeletion should be one less than totalPostCount
+            Assert.True(response.StatusCode == 404);
+        }
+
     }
 }
