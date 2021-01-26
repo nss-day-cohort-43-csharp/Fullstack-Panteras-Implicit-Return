@@ -80,6 +80,45 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(post);
         }
 
+        //Update Post by Sam Edwards
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Post post)
+        {
+            // Get current user
+            var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
+
+            // Get post's author
+            var postAuthor = post.UserProfileId;
+            // Check if incoming user is NOT an admin OR post's author,
+            if (firebaseUser.UserTypeId != 1 && firebaseUser.Id != postAuthor)
+            {
+                return NotFound();
+            }
+
+            // Post Id coming from URL must match the Post object's
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            // Get Post by Id to ensure it's in database
+            var postToEdit = _repo.GetById(id);
+
+            if (postToEdit == null)
+            {
+                return NotFound();
+            }
+
+            // Ensure titles match from post from Db and one from app
+            if (postToEdit.Title != post.Title)
+            {
+                return BadRequest();
+            }
+
+            _repo.Update(postToEdit);
+            return NoContent();
+        }
+
         //Delete by Sam Edwards
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

@@ -7,8 +7,6 @@ import { useHistory } from "react-router-dom";
 
 const PostForm = ({ editablePost }) => {
 
-    console.log("INCOMING", editablePost)
-
     const { getToken } = useContext(UserProfileContext)
     const [categories, setCategories] = useState([]);
     const [post, setPost] = useState("");
@@ -17,7 +15,14 @@ const PostForm = ({ editablePost }) => {
     const userId = +localStorage.getItem("userProfileId");
   
     useEffect(() => {
-      getCategories()
+        if (editablePost) {
+            // Attempting to get DatePicker to actually show date info
+            // It doesn't like it even when I try to reformat it.
+            const pubDate = editablePost.publishDateTime.split("T")[0]
+            editablePost.publishDateTime = pubDate
+            setPost(editablePost)
+        }
+        getCategories()
     }, []);
   
     const getCategories = () => {
@@ -171,7 +176,7 @@ const PostForm = ({ editablePost }) => {
                     type="date"
                     id="postDate"
                     name="publishDateTime"
-                    defaultValue={post.publishDateTime}
+                    defaultalue={post.publishDateTime}
                     placeholder=""></input>
                </fieldset>
                 <button type="submit" disabled={loading}>Submit</button>

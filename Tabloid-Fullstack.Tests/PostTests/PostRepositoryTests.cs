@@ -125,6 +125,12 @@ namespace Tabloid_Fullstack.Tests.PostTests
         }
 
         [Fact]
+        public void User_Can_Update_Post()
+        {
+            // After controller tests are correct, try and update post
+        }
+
+        [Fact]
         public void User_Can_Delete_Post_Without_Comments()
         {
             // Create a new Post to delete
@@ -182,6 +188,5 @@ namespace Tabloid_Fullstack.Tests.PostTests
             // Post total after deletion should be one less than original total
             Assert.True(postTotalAfterDeletion == postTotal - 1);
         }
-
     }
 }

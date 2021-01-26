@@ -19,6 +19,36 @@ namespace Tabloid_Fullstack.Tests.PostTests
         }
 
         [Fact]
+        public void Update_For_Only_Admin()
+        {
+            // As an Admin, I should be able to update any posts, including those that aren't mine
+        }
+
+        [Fact]
+        public void Update_For_Only_Post_Owner()
+        {
+            // As an Owner, I should only be able to update my posts
+        }
+
+        [Fact]
+        public void Update_For_Only_Matching_IdParam_And_PostId()
+        {
+            // If the Id from the URL parameter and the incoming Post Obj do not match, return BadRequest
+        }
+
+        [Fact]
+        public void Update_For_Only_Post_In_Db()
+        {
+            // The Id from the URL parameter must return a Post from the Db, or return NotFound
+        }
+
+        [Fact]
+        public void Update_For_Only_Posts_That_Have_Matching_Names()
+        {
+            // Names from the PostToEdit from the Db and incoming Post must match, else return BadRequest
+        }
+
+        [Fact]
         public void Delete_For_Only_Admin()
         {
             // As an Admin, I should be able to delete any post, including those that aren't mine

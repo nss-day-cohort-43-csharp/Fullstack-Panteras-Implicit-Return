@@ -17,7 +17,10 @@ namespace Tabloid_Fullstack.Repositories
         
         //Add by Sam Edwards
         void Add(Post post);
-        
+
+        //Update by Sam Edwards
+        void Update(Post post);
+
         //Delete by Sam Edwards
         void Delete(Post post);
     }
