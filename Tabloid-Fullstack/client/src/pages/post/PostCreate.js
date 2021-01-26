@@ -120,7 +120,7 @@ const PostCreate = ({ editablePost }) => {
                     maxLength="255"
                     id="postTitle"
                     name="title"
-                    value={post.title}
+                    defaultValue={post.title}
                     placeholder="Add Post Title"
                     required />
                 </fieldset>
@@ -157,7 +157,7 @@ const PostCreate = ({ editablePost }) => {
                    onChange={handleControlledInputChange}
                    id="postHeader"
                    name="imageLocation"
-                   value={post.imageLocation}
+                   defaultValue={post.imageLocation}
                    placeholder="Add image URL"
                    />
                </fieldset>
@@ -168,7 +168,7 @@ const PostCreate = ({ editablePost }) => {
                     type="date"
                     id="postDate"
                     name="publishDateTime"
-                    value={post.publishDateTime}
+                    defaultValue={post.publishDateTime}
                     placeholder=""></input>
                </fieldset>
                 <button type="submit" disabled={loading}>Submit</button>
