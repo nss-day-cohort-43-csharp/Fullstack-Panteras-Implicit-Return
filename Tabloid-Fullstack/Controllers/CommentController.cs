@@ -48,7 +48,7 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public ActionResult Add(Comment comment)
         {
-            _repo.Add(comment);
+            _commentRepository.Add(comment);
             return Ok(comment);
         }
 
