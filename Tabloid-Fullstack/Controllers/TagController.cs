@@ -40,6 +40,8 @@ namespace Tabloid_Fullstack.Controllers
         {
             var tags = _tagRepository.GetAll();
             return Ok(tags);
+
+      
         }
 
         [HttpGet("{id}")]

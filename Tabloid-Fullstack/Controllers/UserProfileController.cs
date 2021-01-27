@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
@@ -15,6 +17,12 @@ namespace Tabloid_Fullstack.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IUserProfileRepository _repo;
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _repo.GetByFirebaseUserId(firebaseUserId);
+        }
         public UserProfileController(IUserProfileRepository repo)
         {
             _repo = repo;
@@ -36,6 +44,15 @@ namespace Tabloid_Fullstack.Controllers
                 nameof(GetUserProfile),
                 new { firebaseUserId = userProfile.FirebaseUserId },
                 userProfile);
+        }
+
+        [HttpPut]
+        public IActionResult AddUserImage(Image image)
+        {
+
+            var user = GetCurrentUserProfile();
+            _repo.AddImageProfile(image, user.Id);
+            return Ok();
         }
     }
 }

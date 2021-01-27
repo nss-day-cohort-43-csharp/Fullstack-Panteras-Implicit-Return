@@ -19,6 +19,8 @@ export function UserProfileProvider(props) {
     });
   }, []);
 
+  
+
   const login = (email, pw) => {
     return firebase
       .auth()
