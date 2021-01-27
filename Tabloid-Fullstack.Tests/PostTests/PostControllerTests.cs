@@ -255,9 +255,65 @@ namespace Tabloid_Fullstack.Tests.PostTests
         }
 
         [Fact]
-        public void Update_For_Only_Posts_That_Have_Matching_Names()
+        public void Update_For_Only_Posts_That_Have_Matching_Titles_In_Db_And_Incoming()
         {
-            // Names from the PostToEdit from the Db and incoming Post must match, else return BadRequest
+            // Titles from the PostToEdit from the Db and incoming Post must match
+
+            var postId = 1;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "Fake Title",
+                UserProfileId = 2
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Update should succeed because title's match
+            Assert.IsType<NoContentResult>(response);
+        }
+
+        [Fact]
+        public void Update_Returns_BadRequest_If_PostFromDb_Title_Doesnt_Match_Incoming_Post()
+        {
+            // Titles from the PostToEdit from the Db and incoming Post return BadRequest when they don't match
+            
+            var postId = 1;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "TITLE DOES NOT MATCH",
+                UserProfileId = 2
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Update should fail because titles do not match
+            Assert.IsType<BadRequestResult>(response);
+            // Verify that Update never gets called
+            _fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
         }
 
         //[Fact]
