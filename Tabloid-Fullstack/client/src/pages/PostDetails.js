@@ -69,6 +69,7 @@ const PostDetails = () => {
         <h1>{post.title}</h1>
         <h5 className="text-danger">{post.category.name}</h5>
         <TagSelect />
+        <h1>header</h1>
         <div className="row">
           <div className="col">
             <img

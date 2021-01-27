@@ -1,21 +1,36 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from "reactstrap";
 import { UserProfileContext } from '../providers/UserProfileProvider';
 
-const TagSelect = ({tag}) => {
+const TagSelect = () => {
+  const { postId } = useParams();
   const [tags, setTags] = useState([]);
   const [postTag, setPostTag] = useState();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { getToken } = useContext(UserProfileContext);
 
-  const handleControlledInputChange = (event) => {
-    const newPostTag = { ...postTag };
-    newPostTag[event.target.name] = event.target.value;
-    setPostTag(newPostTag);
-  };
-  const toggle = () => setDropdownOpen(prevState => !prevState);
-
+  const addPostTag = submittedPostTag => {
+    getToken().then(token => 
+        fetch(`/api/posttag`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(submittedPostTag)
+        })
+    )
+    .then(res => {
+        // Check the response status before converting to JSON, and display toast notifications
+        if (res.status === 200) {
+            toast.info("You've successfully added a tag to your post!")
+            return res.json();
+        } else {
+            toast.error(`Error! Unable to add tag!`)
+            return
+        }
+    })
+}
 
   useEffect(() => {
     return getToken().then((token) =>
@@ -35,38 +50,38 @@ const TagSelect = ({tag}) => {
         .then((data) => {
             if (data) {
                 setTags(data);
+                console.log(data)
             }
         })
     )
   }, []);
 
-  if (!tag) return null;
+  if (!tags) return null;
 
   return (
     <div>
-       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-           <DropdownToggle caret>
-            Tags
-           </DropdownToggle>
-                <DropdownMenu
-                    value={tag.id}
-                    name="tagId"
-                    required
-                    id="tagId"
-                    className="form-control"
-                    autoFocus
-                    onChange={handleControlledInputChange}>
-                    <DropdownItem value="0">
-                        select tag
-                    </DropdownItem>
-                    {tags.map((tag) => {
-                        return (
-                            <DropdownItem key={tag.id} value={tag.id}>
-                            {tag.name}
-                            </DropdownItem>
-                        )})}
-                </DropdownMenu>
-        </Dropdown>
+            <select
+                value=""
+                name="tagId"
+                id="tagId"
+                className="form-control"
+                onChange={e => {
+                    addPostTag ({
+                        postId,
+                        tagId: e.target.value
+                    })
+                }}>
+                <option value="0">
+                    add a tag
+                </option>
+                {tags.map((tag) => {
+                    return (
+                        <option key={tag.id} value={tag.id}>
+                        {tag.name}
+                        </option>
+                    )})}
+            </select>
+        
     </div>             
   );
 };

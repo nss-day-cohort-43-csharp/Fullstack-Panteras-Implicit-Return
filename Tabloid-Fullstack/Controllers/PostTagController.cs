@@ -17,16 +17,18 @@ namespace Tabloid_Fullstack.Controllers
 
         private IPostTagRepository _postTagRepository;
         private IUserProfileRepository _userProfileRepository;
+        private IPostRepository _postRepository;
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
         }
 
-        public PostTagController(IPostTagRepository postTagRepository, IUserProfileRepository userProfileRepository)
+        public PostTagController(IPostTagRepository postTagRepository, IUserProfileRepository userProfileRepository, IPostRepository postRepository)
         {
             _postTagRepository = postTagRepository;
             _userProfileRepository = userProfileRepository;
+            _postRepository = postRepository;
 
         }
 
@@ -52,7 +54,11 @@ namespace Tabloid_Fullstack.Controllers
         public IActionResult Add(PostTag postTag)
         {
             var currentUserProfile = GetCurrentUserProfile();
-            if (currentUserProfile.UserTypeId != 1)
+            var post = _postRepository.GetById(postTag.PostId);
+            var postAuthor = post.UserProfileId;
+
+            //do a check to see if the current user is the author
+            if (currentUserProfile.UserTypeId != 1 && currentUserProfile.Id != postAuthor )
             {
                 return NotFound();
             }
