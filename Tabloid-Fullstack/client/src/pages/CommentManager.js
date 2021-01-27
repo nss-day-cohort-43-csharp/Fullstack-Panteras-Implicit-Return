@@ -76,27 +76,34 @@ const CommentManager = () => {
 
                     <div className="my-4">
                         <InputGroup>
-                            <Input
-                                onChange={(e) => setNewSubject(e.target.value)}
-                                value={newSubject}
-                                placeholder="Add a new subject"
-                            />
+                            <div className="col-lg-10 text-center">
+                                <Input
+                                    onChange={(e) => setNewSubject(e.target.value)}
+                                    value={newSubject}
+                                    placeholder="Subject"
+                                />
+                            </div>
                             <br />
-                            <Input
-                                onChange={(e) => setNewContent(e.target.value)}
-                                value={newContent}
-                                placeholder="Add a new content"
-                            />
-                            <Button onClick={saveNewComment}>Save</Button>
+                            <div className="col-lg-10 text-center">
+                                <Input
+                                    onChange={(e) => setNewContent(e.target.value)}
+                                    value={newContent}
+                                    placeholder="Content"
+                                />
+                            </div>
+                            <div className="text-center">
+                                <Button onClick={saveNewComment}>Save Comment</Button>
+                            </div>
                         </InputGroup>
                     </div>
-                    <div><ListGroup>
-                        {comments.map((comment) => (
-                            <ListGroupItem key={comment.id}>
-                                <Comment comment={comment} />
-                            </ListGroupItem>
-                        ))}
-                    </ListGroup>
+                    <div>
+                        <ListGroup>
+                            {comments.map((comment) => (
+                                <ListGroupItem key={comment.id}>
+                                    <Comment comment={comment} />
+                                </ListGroupItem>
+                            ))}
+                        </ListGroup>
                     </div>
                 </div>
             </div>

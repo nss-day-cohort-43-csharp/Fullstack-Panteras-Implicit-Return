@@ -86,19 +86,13 @@ const PostDetails = () => {
         </div>
       </div>
 
+      {/* ***********Comments******** */}
       <div>
-        {/* <h4>Comments</h4> */}
         <Container>
-          {/* {comment.map((c) => {
-            return <div key={c.id}><CommentCard comment={c} /></div>
-          })
-          } */}
-
           <CommentManager />
-
         </Container>
-
       </div>
+      {/* ***********END Comments******** */}
     </div>
 
   );
