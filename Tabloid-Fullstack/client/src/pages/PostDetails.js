@@ -97,7 +97,7 @@ const PostDetails = () => {
             // If I'm an Admin or it's my post, show me edit/delete options
             !isAdmin() && post.userProfileId !== userId ? null : 
               <ButtonGroup size="sm">
-                <Button className="btn btn-primary" onClick={e => console.log("EDIT")}>
+                <Button className="btn btn-primary" onClick={e => history.push(`/post/edit/${postId}`)}>
                   Edit
                 </Button>
                 <Button

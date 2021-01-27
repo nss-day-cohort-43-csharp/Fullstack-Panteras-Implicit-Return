@@ -3,23 +3,29 @@
 import React, { useContext, useEffect, useState } from "react"
 import { UserProfileContext } from "../../providers/UserProfileProvider"
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const PostForm = ({ editablePost }) => {
 
+    const history = useHistory();
+    const { postId } = useParams();
     const { getToken } = useContext(UserProfileContext)
+
     const [categories, setCategories] = useState([]);
     const [post, setPost] = useState("");
     const [loading, setLoading] = useState(true);
-    const history = useHistory();
+
     const userId = +localStorage.getItem("userProfileId");
   
     useEffect(() => {
         if (editablePost) {
             // Attempting to get DatePicker to actually show date info
             // It doesn't like it even when I try to reformat it.
-            const pubDate = editablePost.publishDateTime.split("T")[0]
-            editablePost.publishDateTime = pubDate
+            if (editablePost.publishDateTime !== null)
+            {
+                const pubDate = editablePost.publishDateTime.split("T")[0]
+                editablePost.publishDateTime = pubDate
+            }
             setPost(editablePost)
         }
         getCategories()
@@ -180,7 +186,7 @@ const PostForm = ({ editablePost }) => {
                     placeholder=""></input>
                </fieldset>
                 <button type="submit" disabled={loading}>Submit</button>
-                {/* ADD A CANCEL BUTTON IF WE'RE EDITING, AND RETURN TO THE POSTS DETAILS */}
+                {!editablePost ? null : <button onClick={e => history.push(`/post/${postId}`)}>Cancel</button>}
             </form>
         </div>
     )
