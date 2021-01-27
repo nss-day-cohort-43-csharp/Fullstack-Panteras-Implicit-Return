@@ -8,6 +8,8 @@ const TagSelect = () => {
   const [tags, setTags] = useState([]);
   const [postTag, setPostTag] = useState();
   const { getToken } = useContext(UserProfileContext);
+  const userId = +localStorage.getItem("userProfileId");
+
 
   const addPostTag = submittedPostTag => {
     getToken().then(token => 

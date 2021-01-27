@@ -16,7 +16,9 @@ const PostDetails = () => {
   const [comment, setComment] = useState();
   const { getToken } = useContext(UserProfileContext);
   const history = useHistory();
+  const userId = +localStorage.getItem("userProfileId");
 
+  console.log(userId)
   useEffect(() => {
     return getToken().then((token) =>
       fetch(`/api/post/${postId}`, {
@@ -68,7 +70,8 @@ const PostDetails = () => {
       <div className="container">
         <h1>{post.title}</h1>
         <h5 className="text-danger">{post.category.name}</h5>
-        <TagSelect />
+        {userId === post.userProfileId ? <TagSelect /> : ""}
+        
         <h1>header</h1>
         <div className="row">
           <div className="col">
