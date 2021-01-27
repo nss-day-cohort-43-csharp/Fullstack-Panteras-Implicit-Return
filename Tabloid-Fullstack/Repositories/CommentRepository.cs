@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tabloid_Fullstack.Models;
-using Tabloid_Fullstack.Data;
 using Microsoft.EntityFrameworkCore;
+using Tabloid_Fullstack.Data;
+using Tabloid_Fullstack.Models;
 
 namespace Tabloid_Fullstack.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        private readonly ApplicationDbContext _context;
+        private ApplicationDbContext _context;
 
         public CommentRepository(ApplicationDbContext context)
         {
@@ -20,8 +20,8 @@ namespace Tabloid_Fullstack.Repositories
         {
             {
                 return _context.Comment
-                    .Where(c => c.PostId == PostId) 
-                    .OrderBy(c => c.CreateDateTime)
+                    .Where(c => c.PostId == PostId)
+                    .OrderByDescending(c => c.CreateDateTime)
                     .Include(c => c.UserProfile)
                     .ToList();
             }
@@ -31,10 +31,16 @@ namespace Tabloid_Fullstack.Repositories
         {
             {
                 return _context.Comment
-                    .OrderBy(c => c.CreateDateTime)
+                    .OrderByDescending(c => c.CreateDateTime)
+                    .Include(c => c.UserProfile)
                     .ToList();
             }
-            //throw new NotImplementedException();
+        }
+
+        public void Add(Comment comment)
+        {
+            _context.Add(comment);
+            _context.SaveChanges();
         }
     }
 }

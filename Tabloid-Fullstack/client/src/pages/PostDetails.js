@@ -10,11 +10,12 @@ import {
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container, Jumbotron } from "reactstrap";
-import CommentSummaryCard from "../components/CommentSummaryCard";
+import CommentCard from "../components/CommentCard";
 import PostReactions from "../components/posts/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import "./PostDetails.css";
+import CommentManager from "./CommentManager";
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -116,14 +117,13 @@ const PostDetails = () => {
         </div>
       </div>
 
+      {/* ***********Comments******** */}
       <div>
-        <h4>Comments</h4>
-        <Container>
-          {comment.map((c) => {
-            return <div key={c.id}><CommentSummaryCard comment={c} /></div>
-          })}
+      <Container>
+          <CommentManager />
         </Container>
       </div>
+      {/* ***********END Comments******** */}
     </div>
 
     <Modal isOpen={pendingDelete}>

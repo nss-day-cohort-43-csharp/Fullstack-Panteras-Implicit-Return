@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card } from "reactstrap";
 import formatDate from "../utils/dateFormatter";
 
-const CommentSummaryCard = ({ comment }) => {
+const CommentCard = ({ comment }) => {
     return (
         <Card className="post-summary__card">
             <div className="row">
@@ -28,4 +28,4 @@ const CommentSummaryCard = ({ comment }) => {
     );
 };
 
-export default CommentSummaryCard;
+export default CommentCard;
