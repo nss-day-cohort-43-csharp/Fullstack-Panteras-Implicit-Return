@@ -128,6 +128,36 @@ namespace Tabloid_Fullstack.Tests.PostTests
         public void User_Can_Update_Post()
         {
             // After controller tests are correct, try and update post
+
+            // Set original content and new content to check
+            var originalContent = "One of the best songs on Chocolate & Cheese";
+            var updatedContent = "It's a real bop!";
+
+            // Pass an updated version of PostId 1
+            var updatedPost = new Post
+            {        
+                Id = 3,
+                Title = "Voodoo Lady",
+                Content = updatedContent,
+                ImageLocation = "http://foo.gif",
+                CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                IsApproved = true,
+                CategoryId = 1,
+                UserProfileId = 1
+            };
+
+            // Get our PostRepo
+            var repo = new PostRepository(_context);
+
+            // Attempt to update post
+            repo.Update(updatedPost);
+
+            // Get Post By Id
+            var postAfterUpdate = repo.GetById(3);
+
+            // The new content should be there
+            Assert.True(postAfterUpdate.Content == updatedContent);
         }
 
         [Fact]

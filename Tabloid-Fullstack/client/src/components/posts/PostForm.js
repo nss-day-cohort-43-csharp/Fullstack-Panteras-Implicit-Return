@@ -79,7 +79,32 @@ const PostForm = ({ editablePost }) => {
     }
 
     const updatePost = updatedPost => {
-        
+        // getToken().then(token =>
+        //     fetch(`/api/post/${postId}`, {
+        //         method: "PUT",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             Authorization: `Bearer ${token}`,
+        //         },
+        //         body: JSON.stringify(updatedPost)
+        //     }))
+        //     .then(res => {
+        //         if (res.status === 200) {
+        //             toast.info(`Post updated!`)
+        //             return res.json();
+        //         } else {
+        //             toast.error(`Error! Unable to edit post!`)
+        //             return
+        //         }
+        //     })
+        //     .then(post => {
+        //         // Depending on if we have a response, push to the new post
+        //         if (!post) {
+        //             return
+        //         } else {
+        //             history.push(`/post/${post.id}`)
+        //         }
+        //     })
     }
 
     const handleControlledInputChange = e => {
@@ -95,6 +120,7 @@ const PostForm = ({ editablePost }) => {
         }
         if (editablePost !== undefined) {
             updatePost({
+                userProfileId: editablePost.userProfileId,
                 id: editablePost.id,
                 userId,
                 title: post.title,

@@ -109,12 +109,6 @@ namespace Tabloid_Fullstack.Controllers
                 return NotFound();
             }
 
-            // Ensure titles match from post from Db and one from app
-            if (postToEdit.Title != post.Title)
-            {
-                return BadRequest();
-            }
-
             _repo.Update(postToEdit);
             return NoContent();
         }
