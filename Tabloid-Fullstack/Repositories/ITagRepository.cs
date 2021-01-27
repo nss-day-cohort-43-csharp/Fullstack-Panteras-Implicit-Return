@@ -9,7 +9,13 @@ namespace Tabloid_Fullstack.Repositories
     public interface ITagRepository
     {
         void Add(Tag tag);
+
         List<Tag> GetAll();
+
         Tag GetById(int id);
+
+        void Update(Tag tag);
+
+        void Delete(int id);
     }
 }

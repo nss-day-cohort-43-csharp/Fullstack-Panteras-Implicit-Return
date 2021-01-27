@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//Authored by Terra Roush
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,11 @@ namespace Tabloid_Fullstack.Controllers
      
         private ITagRepository _tagRepository;
         private IUserProfileRepository _userProfileRepository;
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
+        }
 
         public TagController(ITagRepository tagRepository, IUserProfileRepository userProfileRepository)
         {
@@ -51,13 +58,58 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Add(Tag tag)
         {
-            var storedUser = ControllerUtils.GetCurrentUserProfile(_userProfileRepository, User);
-            if (storedUser.UserTypeId != 1)
+            var currentUserProfile = GetCurrentUserProfile();
+            if (currentUserProfile.UserTypeId != 1)
             {
                 return NotFound();
             }
             _tagRepository.Add(tag);
             return Ok(tag);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Tag tag)
+        {
+            var currentUserProfile = GetCurrentUserProfile();
+            if (currentUserProfile.UserTypeId != 1)
+            {
+                return NotFound();
+            }
+            if (id != tag.Id)
+            {
+                return BadRequest();
+            }
+
+            var exisitingTag = _tagRepository.GetById(id);
+
+            if (exisitingTag == null)
+            {
+                return NotFound();
+            }
+            exisitingTag.Name = tag.Name;
+
+            _tagRepository.Update(exisitingTag);
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var currentUserProfile = GetCurrentUserProfile();
+            if (currentUserProfile.UserTypeId != 1)
+            {
+                return NotFound();
+            }
+            var tag = _tagRepository.GetById(id);
+
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            _tagRepository.Delete(id);
+            return NoContent();
         }
     }
 }
