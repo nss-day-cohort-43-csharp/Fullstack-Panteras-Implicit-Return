@@ -1,23 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
 
 namespace Tabloid_Fullstack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommentController : Controller
+    public class CommentController : ControllerBase
     {
         public readonly ICommentRepository _commentRepository;
+        private IUserProfileRepository _userRepo;
 
-        public CommentController(ICommentRepository commentRepository)
-            {
+        public CommentController(ICommentRepository commentRepository, IUserProfileRepository userRepo)
+        {
             _commentRepository = commentRepository;
-            }
+            _userRepo = userRepo;
+        }
 
         [HttpGet("{PostId}")]
         public IActionResult Get(int PostId)
@@ -32,80 +36,30 @@ namespace Tabloid_Fullstack.Controllers
         }
 
 
-
-        // GET: CommentController
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: CommentController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: CommentController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CommentController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Add(Comment comment)
         {
-            try
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
             {
-                return RedirectToAction(nameof(Index));
+                return Unauthorized();
             }
-            catch
-            {
-                return View();
-            }
+            comment.CreateDateTime = DateTime.Now;
+            comment.UserProfileId = GetCurrentUserProfile().Id;
+
+            _commentRepository.Add(comment);
+            return Ok(comment);
         }
 
-        // GET: CommentController/Edit/5
-        public ActionResult Edit(int id)
+        private UserProfile GetCurrentUserProfile()
         {
-            return View();
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //return _userRepo.GetByFirebaseUserId(firebaseUserId);
+            UserProfile user = _userRepo.GetByFirebaseUserId(firebaseUserId);
+            return user;
         }
 
-        // POST: CommentController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CommentController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CommentController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
