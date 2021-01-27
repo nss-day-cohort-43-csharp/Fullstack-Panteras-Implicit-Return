@@ -5,6 +5,7 @@ import { Button, Input } from "reactstrap";
 import { Link } from "react-router-dom";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import "./Login.css";
+import { storage } from '../index';
 
 const Register = () => {
   const { register } = useContext(UserProfileContext);
@@ -15,7 +16,57 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
   const history = useHistory();
+
+  const { getToken } = useContext(UserProfileContext)
+
+  const AddUserImage = (image) => {
+    const imageObj = { imageName: image}
+    return getToken().then((token) =>
+      fetch(`/api/userprofile`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(imageObj)
+      })
+    );
+  };
+
+  const handleChange = e => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0])
+    }
+  }
+
+  const handleUpload = () => {
+    if (image !== null) {
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      uploadTask.on(
+        "state_changed",
+        snapshot => {},
+        error => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then(url => {
+              localStorage.setItem("image", url)
+            }).then(() => {
+              setUrl(localStorage.getItem("image"));
+              AddUserImage(url)
+            })
+        }
+      )
+    }
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,12 +87,17 @@ const Register = () => {
       .then((user) => {
         setLoading(false);
         toast.info(`Welcome ${user.displayName}`);
-        history.push("/");
       })
       .catch((err) => {
         setLoading(false);
         toast.error("Email is already attached to a user.");
-      });
+      })
+      .then(() => {
+        handleUpload()
+      })
+      .then(() => {
+        history.push("/")
+      })
   };
 
   return (
@@ -110,6 +166,9 @@ const Register = () => {
             placeholder="Confirm Password"
             required="required"
           />
+        </div>
+        <div>
+          <input type="file" onChange={handleChange}/>
         </div>
         <div className="form-group">
           <Button type="submit" block color="danger" disabled={loading}>
