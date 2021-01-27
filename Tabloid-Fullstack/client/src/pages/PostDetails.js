@@ -87,7 +87,7 @@ const PostDetails = () => {
       </div>
 
       <div>
-        <h4>Comments</h4>
+        {/* <h4>Comments</h4> */}
         <Container>
           {/* {comment.map((c) => {
             return <div key={c.id}><CommentCard comment={c} /></div>

@@ -70,22 +70,10 @@ const CommentManager = () => {
 
     return (
         <div className="container mt-5">
-            <img
-                height="100"
-                src="/quill.png"
-                alt="Quill Logo"
-                className="bg-danger rounded-circle"
-            />
-            <h1>Comment Management</h1>
+            <h1>Comments</h1>
             <div className="row justify-content-center">
-                <div className="col-xs-12 col-sm-8 col-md-6">
-                    <ListGroup>
-                        {comments.map((comment) => (
-                            <ListGroupItem key={comment.id}>
-                                <Comment comment={comment} />
-                            </ListGroupItem>
-                        ))}
-                    </ListGroup>
+                <div >
+
                     <div className="my-4">
                         <InputGroup>
                             <Input
@@ -93,6 +81,7 @@ const CommentManager = () => {
                                 value={newSubject}
                                 placeholder="Add a new subject"
                             />
+                            <br />
                             <Input
                                 onChange={(e) => setNewContent(e.target.value)}
                                 value={newContent}
@@ -100,6 +89,14 @@ const CommentManager = () => {
                             />
                             <Button onClick={saveNewComment}>Save</Button>
                         </InputGroup>
+                    </div>
+                    <div><ListGroup>
+                        {comments.map((comment) => (
+                            <ListGroupItem key={comment.id}>
+                                <Comment comment={comment} />
+                            </ListGroupItem>
+                        ))}
+                    </ListGroup>
                     </div>
                 </div>
             </div>
