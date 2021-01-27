@@ -21,7 +21,7 @@ namespace Tabloid_Fullstack.Repositories
             {
                 return _context.Comment
                     .Where(c => c.PostId == PostId)
-                    .OrderBy(c => c.CreateDateTime)
+                    .OrderByDescending(c => c.CreateDateTime)
                     .Include(c => c.UserProfile)
                     .ToList();
             }
@@ -31,7 +31,8 @@ namespace Tabloid_Fullstack.Repositories
         {
             {
                 return _context.Comment
-                    .OrderBy(c => c.CreateDateTime)
+                    .OrderByDescending(c => c.CreateDateTime)
+                    .Include(c => c.UserProfile)
                     .ToList();
             }
         }

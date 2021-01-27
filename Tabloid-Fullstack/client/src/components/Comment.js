@@ -28,6 +28,8 @@ const Comment = ({ comment }) => {
         setCommentEdits("");
     };
 
+    if (!comment) return null;
+
     return (
         <div >
             {isEditing ? (
@@ -59,11 +61,11 @@ const Comment = ({ comment }) => {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="col-lg-4 col-sm-12 mt-2 py-3 text-center">
+                            <div className="col-lg-4 col-sm-12 mt-2 py-3 text-center">
                                 <div className="ml-5">
                                     <h6>Author: {comment.userProfile.displayName}</h6>
                                 </div>
-                            </div> */}
+                            </div>
                         </div>
                         <br />
                         <div className="text-right">

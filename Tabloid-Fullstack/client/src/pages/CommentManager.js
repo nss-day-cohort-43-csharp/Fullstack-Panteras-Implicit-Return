@@ -31,7 +31,7 @@ const CommentManager = () => {
 
     const getComments = () => {
         getToken().then((token) =>
-            fetch(`/api/comment`, {
+            fetch(`/api/comment/${postId}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
