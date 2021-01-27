@@ -78,6 +78,10 @@ const PostForm = ({ editablePost }) => {
         })
     }
 
+    const updatePost = updatedPost => {
+        
+    }
+
     const handleControlledInputChange = e => {
         const newPost = { ...post }
         newPost[e.target.name] = e.target.value
@@ -88,18 +92,17 @@ const PostForm = ({ editablePost }) => {
        if (!post.categoryId) {
            toast.error("Error! Must select a Category!")
            return
-       }
-
+        }
         if (editablePost !== undefined) {
-            // updatePost({
-            //     id: editablePost.id,
-            //     userId,
-            //     title: post.title,
-            //     content: post.content,
-            //     categoryId: post.categoryId,
-            //     imageLocation: post.imageLocation,
-            //     publishDateTime: post.publishDateTime
-            // })
+            updatePost({
+                id: editablePost.id,
+                userId,
+                title: post.title,
+                content: post.content,
+                categoryId: post.categoryId,
+                imageLocation: post.imageLocation,
+                publishDateTime: post.publishDateTime
+            })
         } else {
             addPost({
                 userProfileId: userId,

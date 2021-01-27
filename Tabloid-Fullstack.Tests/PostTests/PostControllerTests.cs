@@ -64,19 +64,70 @@ namespace Tabloid_Fullstack.Tests.PostTests
 
             // Admin should be able to update post
             Assert.IsType<NoContentResult>(response);
-            // Verifction that Update never gets called - PUT THIS FOR TESTS WE CAN NOT UPDATE
-            //_fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
         }
 
         [Fact]
         public void Update_For_Only_Post_Owner()
         {
             // As an Owner, I should only be able to update my posts
+
+            // My Post Id
+            var postId = 1;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "Fake Title",
+                UserProfileId = 2 // This is the Owner's Post
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdOwner"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Owner should be able to update post
+            Assert.IsType<NoContentResult>(response);
         }
 
         [Fact]
         public void Update_Not_Allowed_For_NonAdmin_NonOwners()
         {
+            // As a non-admin, non-owner, I should not be allowed to update a post
+
+            // Not My Post Id
+            var postId = 1;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "Fake Title",
+                UserProfileId = 2 // This is the Owner's Post
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdOther"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Non-admin, non-owner should get a NotFound response
+            Assert.IsType<NotFoundResult>(response);
+            // Verifction that Update never gets called - PUT THIS FOR TESTS WE CAN NOT UPDATE
+            //_fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
 
         }
 
