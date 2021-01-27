@@ -135,6 +135,7 @@ namespace Tabloid_Fullstack.Controllers
             {
                 return NotFound();
             }
+
             _repo.Delete(postToDelete);
             return NoContent();
         }
