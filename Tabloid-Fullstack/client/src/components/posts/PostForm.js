@@ -84,7 +84,7 @@ const PostForm = ({ editablePost }) => {
         setPost(newPost)
     }
 
-    const constructNewPost = (e) => {
+    const constructNewPost = () => {
        if (!post.categoryId) {
            toast.error("Error! Must select a Category!")
            return
@@ -115,7 +115,7 @@ const PostForm = ({ editablePost }) => {
 
     const createPost = (e) => {
         e.preventDefault()
-        constructNewPost(e)
+        constructNewPost()
     }
 
     if (!categories) {
