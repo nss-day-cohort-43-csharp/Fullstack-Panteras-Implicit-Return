@@ -25,8 +25,10 @@ namespace Tabloid_Fullstack.Tests.PostTests
             // By Spoofing the return values from our Repos, we don't need a Db
             // Spoof Post Repository
             _fakePostRepository = new Mock<IPostRepository>();
-            // Whenever GetById is invoked, with any passed in it, always return this post obj
-            _fakePostRepository.Setup(r => r.GetById(It.IsAny<int>())).Returns((int id) => new Post() { Id = id, UserProfileId = 2, Title = "Fake Title" });
+            // Whenever GetById is invoked, with PostId of 1 passed in it, always return this post obj
+            _fakePostRepository.Setup(r => r.GetById(It.Is<int>(i => i == 1))).Returns((int id) => new Post() { Id = id, UserProfileId = 2, Title = "Fake Title" });
+            // Whenever GetById(2) is run, return null because it's not in our 'fake' database
+            _fakePostRepository.Setup(r => r.GetById(It.Is<int>(i => i == 2))).Returns((int id) => null);
 
             // Spoof a UserProfileRepository
             _fakeUserProfileRepository = new Mock<IUserProfileRepository>();
@@ -126,21 +128,130 @@ namespace Tabloid_Fullstack.Tests.PostTests
 
             // Non-admin, non-owner should get a NotFound response
             Assert.IsType<NotFoundResult>(response);
-            // Verifction that Update never gets called - PUT THIS FOR TESTS WE CAN NOT UPDATE
-            //_fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
-
+            // Verify that Update never gets called
+            _fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
         }
 
         [Fact]
         public void Update_For_Only_Matching_IdParam_And_PostId()
         {
-            // If the Id from the URL parameter and the incoming Post Obj do not match, return BadRequest
+            // Id from URL param and incoming Post Obj should match
+
+            var postId = 1;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "Fake Title",
+                UserProfileId = 2 // This is the Owner's Post
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Update should succeed because IdParam and PostId match
+            Assert.IsType<NoContentResult>(response);
+        }
+
+        [Fact]
+        public void Update_For_Not_Matching_IdParam_And_PostId()
+        {
+            // If the Id from the URL parameter and incoming Post Obj do not match, return BadRequest
+            // PostId that doesn't match
+            var postId = 999999;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "Fake Title",
+                UserProfileId = 2 // This is the Owner's Post
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Update should succeed because IdParam and PostId match
+            Assert.IsType<BadRequestResult>(response);
+            // Verify that Update never gets called
+            _fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
         }
 
         [Fact]
         public void Update_For_Only_Post_In_Db()
         {
-            // The Id from the URL parameter must return a Post from the Db, or return NotFound
+            // The Id from the URL parameter must return a Post from the Db
+            var postId = 1;
+            var postToUpdate = new Post()
+            {
+                Id = 1,
+                Title = "Fake Title",
+                UserProfileId = 2 // This is the Owner's Post
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Update should succeed because IdParam and PostId match
+            Assert.IsType<NoContentResult>(response);
+        }
+
+        [Fact]
+        public void Update_Returns_NotFound_If_Post_Is_Not_In_Db()
+        {
+            // The Id from the URL parameter returns null because it's not in Db
+            var postId = 2; // 2 always returns Null
+            var postToUpdate = new Post()
+            {
+                Id = 2,
+                Title = "Fake Title",
+                UserProfileId = 2 // This is the Owner's Post
+            };
+
+            // Spoof an authenticated user by generating a ClaimsPrincipal
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
+                                   }, "TestAuthentication"));
+
+            // Spoof the Post Controller
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
+
+            // Attempt to Update the fake Post
+            var response = controller.Put(postId, postToUpdate);
+
+            // Update should succeed because IdParam and PostId match
+            Assert.IsType<NotFoundResult>(response);
+            // Verify that Update never gets called
+            _fakePostRepository.Verify(r => r.Update(It.IsAny<Post>()), Times.Never());
         }
 
         [Fact]
@@ -280,6 +391,5 @@ namespace Tabloid_Fullstack.Tests.PostTests
         //    // TotalPostCountAfterDeletion should be one less than totalPostCount
         //    Assert.True(response.StatusCode == 404);
         //}
-
     }
 }
