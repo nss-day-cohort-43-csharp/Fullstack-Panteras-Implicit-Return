@@ -5,10 +5,10 @@ namespace Tabloid_Fullstack.Repositories
 {
     public interface ICommentRepository
     {
-        List<Comment> GetAllByPostId(int PostId);
-        List<Comment> GetAll();
-        //void Add(Comment comment);
-        //void Update(Comment commnet);
-        //void Delete(int id);
+        public List<Comment> GetAllByPostId(int PostId);
+        public List<Comment> GetAll();
+        public void Add(Comment comment);
+        //public void Update(Comment commnet);
+        //public void Delete(int id);
     }
 }
