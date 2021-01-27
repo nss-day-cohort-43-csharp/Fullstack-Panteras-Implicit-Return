@@ -17,6 +17,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
   const history = useHistory();
 
   const { getToken } = useContext(UserProfileContext)
@@ -58,9 +59,8 @@ const Register = () => {
             .then(url => {
               localStorage.setItem("image", url)
             }).then(() => {
-              const newImage = localStorage.getItem("image");
-              console.log(newImage)
-              AddUserImage(newImage)
+              setUrl(localStorage.getItem("image"));
+              AddUserImage(url)
             })
         }
       )
@@ -87,14 +87,16 @@ const Register = () => {
       .then((user) => {
         setLoading(false);
         toast.info(`Welcome ${user.displayName}`);
-        history.push("/");
       })
       .catch((err) => {
         setLoading(false);
         toast.error("Email is already attached to a user.");
       })
       .then(() => {
-      handleUpload()
+        handleUpload()
+      })
+      .then(() => {
+        history.push("/")
       })
   };
 
