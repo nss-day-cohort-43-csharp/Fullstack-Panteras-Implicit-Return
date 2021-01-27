@@ -7,6 +7,7 @@ import PostReactions from "../components/posts/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import "./PostDetails.css";
+import TagSelect from "../components/TagSelect";
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -37,7 +38,8 @@ const PostDetails = () => {
             setPost(data ? data.post : null);
             setReactionCounts(data.reactionCounts);
           }
-        }));
+        }))
+        .then(() => {})
   }, [postId]);
 
   useEffect(() => {
@@ -66,6 +68,7 @@ const PostDetails = () => {
       <div className="container">
         <h1>{post.title}</h1>
         <h5 className="text-danger">{post.category.name}</h5>
+        <TagSelect />
         <div className="row">
           <div className="col">
             <img
