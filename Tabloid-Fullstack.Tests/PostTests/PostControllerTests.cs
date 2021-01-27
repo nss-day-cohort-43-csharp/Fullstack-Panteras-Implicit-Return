@@ -10,6 +10,8 @@ using Moq;
 using Xunit;
 using Tabloid_Fullstack.Models;
 
+// When doing Controller Unit Tests, you do NOT need to Spoof the Database because we ARE NOT
+// Making any changes to it. We Spoof the Repositories. We are able to do this because they are Interfaces
 namespace Tabloid_Fullstack.Tests.PostTests
 {
     public class PostControllerTests
@@ -20,28 +22,31 @@ namespace Tabloid_Fullstack.Tests.PostTests
 
         public PostControllerTests()
         {
-            // Because we're faking the repo, we don't need to fake a database for controllers
+            // By Spoofing the return values from our Repos, we don't need a Db
+            // Spoof Post Repository
             _fakePostRepository = new Mock<IPostRepository>();
+            // Whenever GetById is invoked, with any passed in it, always return this post obj
             _fakePostRepository.Setup(r => r.GetById(It.IsAny<int>())).Returns((int id) => new Post() { Id = id, UserProfileId = 2, Title = "Fake Title" });
 
+            // Spoof a UserProfileRepository
             _fakeUserProfileRepository = new Mock<IUserProfileRepository>();
-            _fakeUserProfileRepository.Setup(r => r.GetByFirebaseUserId("FirebaseIdOwner")).Returns(new UserProfile() { Id = 1, DisplayName = "DisplayName", UserTypeId = 2 });
-            _fakeUserProfileRepository.Setup(r => r.GetByFirebaseUserId("FirebaseIdAdmin")).Returns(new UserProfile() { Id = 2, DisplayName = "Admin", UserTypeId = 1 });
+            // Spoof a User with FirebaseId of an Owner, Admin, and Other
+            _fakeUserProfileRepository.Setup(r => r.GetByFirebaseUserId("FirebaseIdAdmin")).Returns(new UserProfile() { Id = 1, DisplayName = "Admin", UserTypeId = 1 });
+            _fakeUserProfileRepository.Setup(r => r.GetByFirebaseUserId("FirebaseIdOwner")).Returns(new UserProfile() { Id = 2, DisplayName = "DisplayName", UserTypeId = 2 });
+            _fakeUserProfileRepository.Setup(r => r.GetByFirebaseUserId("FirebaseIdOther")).Returns(new UserProfile() { Id = 3, DisplayName = "Admin", UserTypeId = 2 });
         }
 
         [Fact]
         public void Update_For_Only_Admin()
         {
-
             // As an Admin, I should be able to update any posts, including those that aren't mine.
             // Get a postId that is not mine
             var postId = 1;
-
             var postToUpdate = new Post()
             {
                 Id = 1,
                 Title = "Fake Title",
-                UserProfileId = 2
+                UserProfileId = 2 // Not the Admin's Post
             };
 
             // Spoof an authenticated user by generating a ClaimsPrincipal
@@ -49,14 +54,12 @@ namespace Tabloid_Fullstack.Tests.PostTests
                                         new Claim(ClaimTypes.NameIdentifier, "FirebaseIdAdmin"),
                                    }, "TestAuthentication"));
 
-
             // Spoof the Post Controller
-            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object);
-            // Required to create the controller
-            controller.ControllerContext = new ControllerContext();
-            // Pretend the user is making a request to the controller
-            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+            var controller = new PostController(_fakePostRepository.Object, _fakeUserProfileRepository.Object); 
+            controller.ControllerContext = new ControllerContext(); // Required to create the controller
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user }; // Pretend the user is making a request to the controller
 
+            // Attempt to Update the fake Post
             var response = controller.Put(postId, postToUpdate);
 
             // Admin should be able to update post
@@ -69,6 +72,12 @@ namespace Tabloid_Fullstack.Tests.PostTests
         public void Update_For_Only_Post_Owner()
         {
             // As an Owner, I should only be able to update my posts
+        }
+
+        [Fact]
+        public void Update_Not_Allowed_For_NonAdmin_NonOwners()
+        {
+
         }
 
         [Fact]

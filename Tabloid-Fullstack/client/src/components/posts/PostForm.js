@@ -182,7 +182,7 @@ const PostForm = ({ editablePost }) => {
                     type="date"
                     id="postDate"
                     name="publishDateTime"
-                    defaultalue={post.publishDateTime}
+                    defaultValue={post.publishDateTime}
                     placeholder=""></input>
                </fieldset>
                 <button type="submit" disabled={loading}>Submit</button>
