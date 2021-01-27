@@ -92,5 +92,23 @@ namespace Tabloid_Fullstack.Repositories
             _context.Add(post);
             _context.SaveChanges();
         }
+
+        //Update by Sam Edwards
+        public void Update(Post post)
+        {
+            _context.Entry(post).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        //Delete by Sam Edwards
+        public void Delete(Post post)
+        {    
+            var commentsForPost = _context.Comment.Where(c => c.PostId == post.Id).ToList();
+            _context.Comment.RemoveRange(commentsForPost);
+            _context.SaveChanges();
+
+            _context.Post.Remove(post);
+            _context.SaveChanges();
+        }
     }
 }

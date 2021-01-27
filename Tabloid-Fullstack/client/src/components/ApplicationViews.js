@@ -6,6 +6,7 @@ import Explore from "../pages/Explore";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PostCreate from "../pages/post/PostCreate"
+import PostEdit from "../pages/post/PostEdit";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import MyPosts from "../pages/MyPosts";
@@ -25,6 +26,9 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/post/create">
         {isLoggedIn ? <PostCreate /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/post/edit/:postId">
+        {isLoggedIn ? <PostEdit /> : <Redirect to="/login" />}
       </Route>
       <Route path="/my-posts">
         {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}

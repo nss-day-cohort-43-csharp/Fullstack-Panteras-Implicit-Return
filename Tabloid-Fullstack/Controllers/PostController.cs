@@ -79,5 +79,64 @@ namespace Tabloid_Fullstack.Controllers
             _repo.Add(post);
             return Ok(post);
         }
+
+        //Update Post by Sam Edwards
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Post post)
+        {
+            // Get current user
+            var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
+
+            // Get post's author
+            var postAuthor = post.UserProfileId;
+            // Check if incoming user is NOT an admin OR post's author,
+            if (firebaseUser.UserTypeId != 1 && firebaseUser.Id != postAuthor)
+            {
+                return NotFound();
+            }
+
+            // Post Id coming from URL must match the Post object's
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            // Get Post by Id to ensure it's in database
+            var postToEdit = _repo.GetById(id);
+
+            if (postToEdit == null)
+            {
+                return NotFound();
+            }
+
+            _repo.Update(postToEdit);
+            return NoContent();
+        }
+
+        //Delete by Sam Edwards
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            // Get current user
+            var firebaseUser = ControllerUtils.GetCurrentUserProfile(_userRepo, User);
+            // Get post by Id
+            var postToDelete = _repo.GetById(id);
+
+            // Ensure we have a post
+            if (postToDelete == null)
+            {
+                return NotFound();
+            }
+
+            // Get post's author
+            var postAuthor = postToDelete.UserProfileId;
+            // Check if incoming user is NOT an admin OR post's author,
+            if (firebaseUser.UserTypeId != 1 && firebaseUser.Id != postAuthor)
+            {
+                return NotFound();
+            }
+            _repo.Delete(postToDelete);
+            return NoContent();
+        }
     }
 }

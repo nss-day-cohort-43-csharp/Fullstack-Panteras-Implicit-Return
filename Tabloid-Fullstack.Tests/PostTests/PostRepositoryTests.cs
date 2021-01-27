@@ -1,4 +1,5 @@
 // Repository Unit Tests by Sam Edwards
+using Microsoft.AspNetCore.Mvc;
 using System;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
@@ -7,7 +8,7 @@ using Xunit;
 // We are able to do these tests because we "spoof" the ApplicationDbContext using Entity Framework and the EFTextFixture Class
 // For each test, we create a new database in memory. Add some seed data, run our test, then delete Db.
 // This way we have total control of our test environment.
-namespace Tabloid_Fullstack.Tests
+namespace Tabloid_Fullstack.Tests.PostTests
 {
     // Inherits the EFTestFixture so it has access to our fake database 
     public class PostRepositoryTests : EFTestFixture
@@ -15,8 +16,8 @@ namespace Tabloid_Fullstack.Tests
 
         public PostRepositoryTests()
         {
-            // When constructed, runs dummy data
-            AddSampleData();
+            // When constructed, generate dummy data, passing in EFTestFixture database
+            PostDummyData.GenerateData(_context);
         }
 
         [Fact]
@@ -123,83 +124,21 @@ namespace Tabloid_Fullstack.Tests
             Assert.True(justAddedPost.ImageLocation == "http://lorempixel.com/920/360/");
         }
 
-
-        // Dummy data
-        private void AddSampleData()
+        [Fact]
+        public void User_Can_Update_Post()
         {
-            var userType1 = new UserType()
-            {
-                Name = "admin"
-            };
+            // After controller tests are correct, try and update post
 
-            var userType2 = new UserType()
-            {
-                Name = "owner"
-            };
+            // Set original content and new content to check
+            var originalContent = "One of the best songs on Chocolate & Cheese";
+            var updatedContent = "It's a real bop!";
 
-            _context.Add(userType1);
-            _context.Add(userType2);
-            _context.SaveChanges();
-
-            var user1 = new UserProfile()
-            {
-                FirebaseUserId = "TEST_FIREBASE_UID_1",
-                DisplayName = "Dean",
-                FirstName = "Michael",
-                LastName = "Melchiondo",
-                Email = "dean@ween.com",
-                CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
-                ImageLocation = null,
-                UserTypeId =  1
-            };
-
-            var user2 = new UserProfile()
-            {
-                FirebaseUserId = "TEST_FIREBASE_UID_2",
-                DisplayName = "Gene",
-                FirstName = "Aaron",
-                LastName = "Freeman",
-                Email = "gene@ween.com",
-                CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
-                ImageLocation = null,
-                UserTypeId = 2
-            };
-
-            var user3 = new UserProfile()
-            {
-                FirebaseUserId = "TEST_FIREBASE_UID_3",
-                DisplayName = "bestDrummer",
-                FirstName = "Claude",
-                LastName = "Coleman",
-                Email = "claude@ween.com",
-                CreateDateTime = DateTime.Now - TimeSpan.FromDays(365),
-                ImageLocation = null,
-                UserTypeId = 2
-            };
-
-            _context.Add(user1);
-            _context.Add(user2);
-            _context.Add(user3);
-            _context.SaveChanges();
-
-            var category1 = new Category()
-            {
-                Name = "Best Ween Songs"
-            };
-
-            var category2 = new Category()
-            {
-                Name = "Most Underrated Ween Songs"
-            };
-
-            _context.Add(category1);
-            _context.Add(category2);
-            _context.SaveChanges();
-
-            var post1 = new Post()
-            {
+            // Pass an updated version of PostId 1
+            var updatedPost = new Post
+            {        
+                Id = 3,
                 Title = "Voodoo Lady",
-                Content = "One of the best songs on Chocolate & Cheese",
+                Content = updatedContent,
                 ImageLocation = "http://foo.gif",
                 CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
                 PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
@@ -208,34 +147,76 @@ namespace Tabloid_Fullstack.Tests
                 UserProfileId = 1
             };
 
-            var post2 = new Post()
-            {
-                Title = "Ocean Man",
-                Content = "The song everyone knows Ween for",
-                ImageLocation = "http://foo.gif",
-                CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
-                PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
-                IsApproved = true,
-                CategoryId = 2,
-                UserProfileId = 1
-            };
+            // Get our PostRepo
+            var repo = new PostRepository(_context);
 
-            var post3 = new Post()
+            // Attempt to update post
+            repo.Update(updatedPost);
+
+            // Get Post By Id
+            var postAfterUpdate = repo.GetById(3);
+
+            // The new content should be there
+            Assert.True(postAfterUpdate.Content == updatedContent);
+        }
+
+        [Fact]
+        public void User_Can_Delete_Post_Without_Comments()
+        {
+            // Create a new Post to delete
+            var post = new Post
             {
-                Title = "Exactly Where I'm At",
-                Content = "First song from White Pepper. Starts the album off right.",
-                ImageLocation = "http://foo.gif",
-                CreateDateTime = DateTime.Now - TimeSpan.FromDays(10),
+                Title = "Ween, a band, that's really good",
+                Content = "Everyone should listen to Ween. They're a pretty fun band. The End.",
+                ImageLocation = "Ween is like---totally---cool",
                 PublishDateTime = DateTime.Now - TimeSpan.FromDays(10),
                 IsApproved = true,
                 CategoryId = 2,
                 UserProfileId = 3
             };
 
-            _context.Add(post1);
-            _context.Add(post2);
-            _context.Add(post3);
-            _context.SaveChanges();
+            // Get our PostRepo
+            var repo = new PostRepository(_context);
+
+            // Add that Post to Db
+            repo.Add(post);
+
+            // Get a count of all posts
+            var postTotal = repo.Get().Count;
+
+            // Delete just added post
+            repo.Delete(post);
+
+            // Get a new count of all posts;
+            var postTotalAfterDeletion = repo.Get().Count;
+
+            // Post total after deletion should be one less than original total
+            Assert.True(postTotalAfterDeletion == postTotal - 1);
+        }
+
+        [Fact]
+        public void User_Can_Delete_Post_With_Comments()
+        {
+            // Get PostId that has two Comments
+            var postId = 3;
+
+            // Get our PostRepo
+            var postRepo = new PostRepository(_context);
+
+            // Get a count of all posts
+            var postTotal = postRepo.Get().Count;
+
+            // Get Post Object by Id
+            var postToDelete = postRepo.GetById(postId);
+
+            // Delete just added post
+            postRepo.Delete(postToDelete);
+
+            // Get a new count of all posts;
+            var postTotalAfterDeletion = postRepo.Get().Count;
+
+            // Post total after deletion should be one less than original total
+            Assert.True(postTotalAfterDeletion == postTotal - 1);
         }
     }
 }
