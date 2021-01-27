@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Tabloid_Fullstack.Data;
 using Tabloid_Fullstack.Models;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace Tabloid_Fullstack.Repositories
 {
@@ -38,10 +39,11 @@ namespace Tabloid_Fullstack.Repositories
             _context.SaveChanges();
         }
 
-        public void AddImageProfile(string image, int id)
+        public void AddImageProfile(Image image, int id)
         {
             var user = GetByUserProfileId(id);
-            user.ImageLocation = image;
+            user.ImageLocation = image.ImageName;
+            _context.SaveChanges();
         }
 
 

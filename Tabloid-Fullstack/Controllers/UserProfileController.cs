@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,8 +47,9 @@ namespace Tabloid_Fullstack.Controllers
         }
 
         [HttpPut]
-        public IActionResult AddUserImage(string image)
+        public IActionResult AddUserImage(Image image)
         {
+
             var user = GetCurrentUserProfile();
             _repo.AddImageProfile(image, user.Id);
             return Ok();

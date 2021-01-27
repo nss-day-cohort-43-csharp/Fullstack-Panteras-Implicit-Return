@@ -16,20 +16,21 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const history = useHistory();
 
   const { getToken } = useContext(UserProfileContext)
 
   const AddUserImage = (image) => {
+    const imageObj = { imageName: image}
     return getToken().then((token) =>
       fetch(`/api/userprofile`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(image)
+        body: JSON.stringify(imageObj)
       })
     );
   };
@@ -41,7 +42,7 @@ const Register = () => {
   }
 
   const handleUpload = () => {
-    if (image != null) {
+    if (image !== null) {
       const uploadTask = storage.ref(`images/${image.name}`).put(image);
       uploadTask.on(
         "state_changed",
@@ -57,7 +58,7 @@ const Register = () => {
             .then(url => {
               localStorage.setItem("image", url)
             }).then(() => {
-              const newImage = localStorage.getItem("image")
+              const newImage = localStorage.getItem("image");
               console.log(newImage)
               AddUserImage(newImage)
             })

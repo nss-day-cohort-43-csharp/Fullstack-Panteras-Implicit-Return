@@ -13,11 +13,11 @@ import {
   NavLink,
   NavbarText,
 } from "reactstrap";
-import { Image } from "semantic-ui-react";
+import { Header, Image } from "semantic-ui-react";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 
 const AppHeader = () => {
-
+  const image = localStorage.getItem("image");
   const { getCurrentUser, logout, isAdmin } = useContext(UserProfileContext);
   const user = getCurrentUser();
   const history = useHistory();
@@ -103,8 +103,9 @@ const AppHeader = () => {
           </Nav>
           {user ? (
             <NavbarText className="d-sm-none d-md-block">
-              Welcome {user.displayName}
-              <Image src={user.imageLocation}/>
+              <Header as='h3'>
+              <Image src={image} circular/>Welcome {user.displayName}
+              </Header>
             </NavbarText>
           ) : null}
         </Collapse>
